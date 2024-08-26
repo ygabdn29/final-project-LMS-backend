@@ -50,4 +50,16 @@ public class AccountRestController {
           "Registration Failed: " + e.getMessage());
     }
   }
+
+  @PostMapping("/login")
+  public ResponseEntity<Object> login(@RequestBody User userLogin){
+    User authenticatedUser = userService.authenticate(userLogin.getUsername(), userLogin.getPassword());
+
+    if(authenticatedUser == null){
+      return Utils.generateResponseEntity(HttpStatus.OK, "Login Failed!");
+    }
+
+    return Utils.generateResponseEntity(HttpStatus.OK, "Login Success!");
+  }
+  
 }

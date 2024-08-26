@@ -3,6 +3,7 @@ package com.example.demo.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.User;
@@ -13,6 +14,9 @@ import com.example.demo.service.UserService;
 public class UserServiceImpl implements UserService{
   @Autowired
   private UserRepository userRepository;
+  
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @Override
   public List<User> get() {
@@ -34,6 +38,15 @@ public class UserServiceImpl implements UserService{
   public Boolean delete(Integer id) {
     userRepository.deleteById(id);
     return userRepository.findById(id).isEmpty();
+  }
+
+  @Override
+  public User authenticate(String username, String password) {
+    User user = userRepository.findByUsername(username);
+    if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+      return user;
+    }
+    return null;
   }
   
 }
