@@ -28,6 +28,12 @@ public class Employee {
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate bod;
 
+  @Column(name ="first_name")
+  private String firstName;
+
+  @Column(name ="last_name")
+  private String lastName;
+
   @Column
   private String gender;
 
@@ -54,13 +60,17 @@ public class Employee {
   public Employee() {
   }
 
-  public Employee(Integer id, LocalDate bod, String gender, String address, String phone, String email) {
+  public Employee(Integer id, LocalDate bod, String firstName, String lastName, String gender, String address,
+      String phone, String email, Department department) {
     this.id = id;
     this.bod = bod;
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.gender = gender;
     this.address = address;
     this.phone = phone;
     this.email = email;
+    this.department = department;
   }
 
   public User getUser() {
@@ -127,6 +137,20 @@ public class Employee {
     this.department = department;
   }
 
-  
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
   
 }
