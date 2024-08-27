@@ -26,6 +26,10 @@ public class Course {
   @Column
   private String name;
 
+  @OneToMany(mappedBy = "course")
+  @JsonIgnore
+  List<Material> materials;
+
   @Column
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate begin;
@@ -46,6 +50,7 @@ public class Course {
     this.name = name;
     this.begin = begin;
     this.end = end;
+
   }
 
   public Integer getId() {
@@ -62,6 +67,14 @@ public class Course {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public List<Material> getMaterials() {
+    return materials;
+  }
+
+  public void setMaterials(List<Material> materials) {
+    this.materials = materials;
   }
 
   public LocalDate getBegin() {
@@ -87,8 +100,5 @@ public class Course {
   public void setCourseUserRoles(List<CourseUserRole> courseUserRoles) {
     this.courseUserRoles = courseUserRoles;
   }
-
-  
-
 
 }
