@@ -63,7 +63,7 @@ public class Employee {
 
 
   public Employee(Integer id, String firstName, String middleName, String lastName, LocalDate dob, Integer gender,
-      String address, String phone, String email) {
+      String address, String phone, String email, Department department) {
     this.id = id;
     this.firstName = firstName;
     this.middleName = middleName;
@@ -73,6 +73,7 @@ public class Employee {
     this.address = address;
     this.phone = phone;
     this.email = email;
+    this.department = department;
   }
 
 
