@@ -1,9 +1,11 @@
 package com.example.demo.model;
 
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -28,13 +30,17 @@ public class User {
   @JsonIgnore
   private Employee employee;
 
+  @OneToMany(mappedBy = "user")
+  @JsonIgnore
+  private List<CourseUserRole> courseUserRoles;
+
+
   public User() {
   }
 
-  public User(String username, String password, Integer id, Employee employee) {
+  public User(String username, String password, Employee employee) {
     this.username = username;
     this.password = password;
-    this.id = id;
     this.employee = employee;
   }
 
@@ -70,5 +76,14 @@ public class User {
     this.employee = employee;
   }
 
+  public List<CourseUserRole> getCourseUserRoles() {
+    return courseUserRoles;
+  }
+
+  public void setCourseUserRoles(List<CourseUserRole> courseUserRoles) {
+    this.courseUserRoles = courseUserRoles;
+  }
+
+  
   
 }
