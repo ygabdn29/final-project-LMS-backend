@@ -3,6 +3,7 @@ package com.example.demo.model.dto;
 import java.time.LocalDate;
 
 public class NewCourseDTO {
+  private Integer id;
   private String name;
   private LocalDate begin;
   private LocalDate end;
@@ -15,6 +16,17 @@ public class NewCourseDTO {
 
   public NewCourseDTO(String name, LocalDate begin, LocalDate end, String description, Integer quota,
       Integer mentorId) {
+    this.name = name;
+    this.begin = begin;
+    this.end = end;
+    this.description = description;
+    this.quota = quota;
+    this.mentorId = mentorId;
+  }
+
+  public NewCourseDTO(Integer id, String name, LocalDate begin, LocalDate end, String description, Integer quota,
+      Integer mentorId) {
+    this.id = id;
     this.name = name;
     this.begin = begin;
     this.end = end;
@@ -69,6 +81,14 @@ public class NewCourseDTO {
 
   public void setMentorId(Integer mentorId) {
     this.mentorId = mentorId;
+  }
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
   }
 
   
