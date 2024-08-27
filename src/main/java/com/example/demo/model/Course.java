@@ -8,7 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,9 +28,11 @@ public class Course {
   @Column
   private String name;
 
-  @OneToMany(mappedBy = "course")
-  @JsonIgnore
-  List<Material> materials;
+  @Column
+  private String description;
+
+  @Column
+  private Integer quota;
 
   @Column
   @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -40,17 +44,28 @@ public class Course {
 
   @OneToMany(mappedBy = "course")
   @JsonIgnore
-  private List<CourseUserRole> courseUserRoles;
+  private List<Material> materials;
+
+  @OneToMany(mappedBy = "course")
+  @JsonIgnore
+  private List<Progress> progresses;
+  
+  @OneToOne
+  @JoinColumn(name = "mentor_id", referencedColumnName = "id")
+  private User mentor;
 
   public Course() {
   }
 
-  public Course(Integer id, String name, LocalDate begin, LocalDate end) {
+  public Course(Integer id, String name, String description, Integer quota, LocalDate begin, LocalDate end,
+      User mentor) {
     this.id = id;
     this.name = name;
+    this.description = description;
+    this.quota = quota;
     this.begin = begin;
     this.end = end;
-
+    this.mentor = mentor;
   }
 
   public Integer getId() {
@@ -93,12 +108,38 @@ public class Course {
     this.end = end;
   }
 
-  public List<CourseUserRole> getCourseUserRoles() {
-    return courseUserRoles;
+  public String getDescription() {
+    return description;
   }
 
-  public void setCourseUserRoles(List<CourseUserRole> courseUserRoles) {
-    this.courseUserRoles = courseUserRoles;
+  public void setDescription(String description) {
+    this.description = description;
   }
+
+  public Integer getQuota() {
+    return quota;
+  }
+
+  public void setQuota(Integer quota) {
+    this.quota = quota;
+  }
+
+  public List<Progress> getProgresses() {
+    return progresses;
+  }
+
+  public void setProgresses(List<Progress> progresses) {
+    this.progresses = progresses;
+  }
+
+  public User getMentor() {
+    return mentor;
+  }
+
+  public void setMentor(User mentor) {
+    this.mentor = mentor;
+  }
+
+  
 
 }
