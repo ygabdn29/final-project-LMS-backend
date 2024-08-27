@@ -8,7 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -36,7 +38,15 @@ public class Course {
 
   @OneToMany(mappedBy = "course")
   @JsonIgnore
-  private List<CourseUserRole> courseUserRoles;
+  private List<Material> materials;
+
+  @OneToMany(mappedBy = "course")
+  @JsonIgnore
+  private List<Progress> progresses;
+  
+  @OneToOne
+  @JoinColumn(name = "mentor_id", referencedColumnName = "employee_id")
+  private User mentor;
 
   public Course() {
   }
@@ -78,14 +88,6 @@ public class Course {
 
   public void setEnd(LocalDate end) {
     this.end = end;
-  }
-
-  public List<CourseUserRole> getCourseUserRoles() {
-    return courseUserRoles;
-  }
-
-  public void setCourseUserRoles(List<CourseUserRole> courseUserRoles) {
-    this.courseUserRoles = courseUserRoles;
   }
 
   

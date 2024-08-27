@@ -26,7 +26,7 @@ public class Employee {
 
   @Column
   @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private LocalDate bod;
+  private LocalDate dob;
 
   @Column(name ="first_name")
   private String firstName;
@@ -35,7 +35,7 @@ public class Employee {
   private String lastName;
 
   @Column
-  private String gender;
+  private Integer gender;
 
   @Column
   private String address;
@@ -60,10 +60,11 @@ public class Employee {
   public Employee() {
   }
 
-  public Employee(Integer id, LocalDate bod, String firstName, String lastName, String gender, String address,
-      String phone, String email, Department department) {
+
+  public Employee(Integer id, String firstName, String middleName, String lastName, LocalDate dob, Integer gender,
+      String address, String phone, String email, Department department) {
     this.id = id;
-    this.bod = bod;
+    this.dob = dob;
     this.firstName = firstName;
     this.lastName = lastName;
     this.gender = gender;
@@ -71,10 +72,6 @@ public class Employee {
     this.phone = phone;
     this.email = email;
     this.department = department;
-  }
-
-  public User getUser() {
-    return user;
   }
 
   public void setUser(User user) {
@@ -89,21 +86,32 @@ public class Employee {
     this.id = id;
   }
 
-  public LocalDate getBod() {
-    return bod;
+  
+
+  public LocalDate getDob() {
+    return dob;
   }
 
-  public void setBod(LocalDate bod) {
-    this.bod = bod;
+
+  public void setDob(LocalDate dob) {
+    this.dob = dob;
   }
 
-  public String getGender() {
+
+  public Integer getGender() {
     return gender;
   }
 
-  public void setGender(String gender) {
+
+  public void setGender(Integer gender) {
     this.gender = gender;
   }
+
+
+  public User getUser() {
+    return user;
+  }
+
 
   public String getAddress() {
     return address;
