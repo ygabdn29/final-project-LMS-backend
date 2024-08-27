@@ -42,16 +42,19 @@ public class Assignment {
   @JsonIgnore
   private List<AssignmentSubmission> assignmentSubmissions;
 
-  public Assignment() {
-  }  
 
-  public Assignment(Integer id, String name, String content, Integer passingScore, Integer dueDate, Material material) {
+  public Assignment() {
+  }
+
+  public Assignment(Integer id, String name, String content, Integer passingScore, Integer dueDate, Material material,
+      List<AssignmentSubmission> assignmentSubmission) {
     this.id = id;
     this.name = name;
     this.content = content;
     this.passingScore = passingScore;
     this.dueDate = dueDate;
     this.material = material;
+    this.assignmentSubmission = assignmentSubmission;
   }
 
   public Integer getId() {
@@ -101,7 +104,6 @@ public class Assignment {
   public void setMaterial(Material material) {
     this.material = material;
   }
-
 
   public List<AssignmentSubmission> getAssignmentSubmissions() {
     return assignmentSubmissions;
