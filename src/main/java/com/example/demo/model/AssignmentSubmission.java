@@ -29,7 +29,7 @@ public class AssignmentSubmission {
   private Boolean isPassed;
 
   @ManyToOne
-  @JoinColumn(name = "user_id", referencedColumnName = "employee_id")
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 
   @ManyToOne

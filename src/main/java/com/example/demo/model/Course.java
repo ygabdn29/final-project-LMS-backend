@@ -29,6 +29,12 @@ public class Course {
   private String name;
 
   @Column
+  private String description;
+
+  @Column
+  private Integer quota;
+
+  @Column
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate begin;
 
@@ -45,17 +51,21 @@ public class Course {
   private List<Progress> progresses;
   
   @OneToOne
-  @JoinColumn(name = "mentor_id", referencedColumnName = "employee_id")
+  @JoinColumn(name = "mentor_id", referencedColumnName = "id")
   private User mentor;
 
   public Course() {
   }
 
-  public Course(Integer id, String name, LocalDate begin, LocalDate end) {
+  public Course(Integer id, String name, String description, Integer quota, LocalDate begin, LocalDate end,
+      User mentor) {
     this.id = id;
     this.name = name;
+    this.description = description;
+    this.quota = quota;
     this.begin = begin;
     this.end = end;
+    this.mentor = mentor;
   }
 
   public Integer getId() {
@@ -74,6 +84,14 @@ public class Course {
     this.name = name;
   }
 
+  public List<Material> getMaterials() {
+    return materials;
+  }
+
+  public void setMaterials(List<Material> materials) {
+    this.materials = materials;
+  }
+
   public LocalDate getBegin() {
     return begin;
   }
@@ -90,7 +108,38 @@ public class Course {
     this.end = end;
   }
 
-  
+  public String getDescription() {
+    return description;
+  }
 
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public Integer getQuota() {
+    return quota;
+  }
+
+  public void setQuota(Integer quota) {
+    this.quota = quota;
+  }
+
+  public List<Progress> getProgresses() {
+    return progresses;
+  }
+
+  public void setProgresses(List<Progress> progresses) {
+    this.progresses = progresses;
+  }
+
+  public User getMentor() {
+    return mentor;
+  }
+
+  public void setMentor(User mentor) {
+    this.mentor = mentor;
+  }
+
+  
 
 }
