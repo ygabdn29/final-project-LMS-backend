@@ -12,9 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "tb_m_material")
-public class Material {
+@Table(name = "tb_m_assignment")
+public class Assignment {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column
@@ -26,22 +28,30 @@ public class Material {
   @Column(columnDefinition = "TEXT")
   private String content;
 
+  @Column(name = "passing_score")
+  private Integer passingScore;
+
+  @Column(name = "due_date")
+  private Integer dueDate;
+
   @ManyToOne
-  @JoinColumn(name = "course_id", referencedColumnName = "id")
-  private Course course;
-
-  @OneToMany(mappedBy = "material")
-  private List<Assignment> assignments;
+  @JoinColumn(name = "material_id", referencedColumnName = "id")
+  private Material material;
   
+  @OneToMany(mappedBy = "assignment")
+  @JsonIgnore
+  private List<Assignment> assignments;
 
-  public Material(){
-
+  public Assignment() {
   }  
 
-  public Material(Integer id, String name, String content) {
+  public Assignment(Integer id, String name, String content, Integer passingScore, Integer dueDate, Material material) {
     this.id = id;
     this.name = name;
     this.content = content;
+    this.passingScore = passingScore;
+    this.dueDate = dueDate;
+    this.material = material;
   }
 
   public Integer getId() {
@@ -68,12 +78,28 @@ public class Material {
     this.content = content;
   }
 
-  public Course getCourse() {
-    return course;
+  public Integer getPassingScore() {
+    return passingScore;
   }
 
-  public void setCourse(Course course) {
-    this.course = course;
+  public void setPassingScore(Integer passingScore) {
+    this.passingScore = passingScore;
+  }
+
+  public Integer getDueDate() {
+    return dueDate;
+  }
+
+  public void setDueDate(Integer dueDate) {
+    this.dueDate = dueDate;
+  }
+
+  public Material getMaterial() {
+    return material;
+  }
+
+  public void setMaterial(Material material) {
+    this.material = material;
   }
 
   public List<Assignment> getAssignments() {
@@ -83,5 +109,6 @@ public class Material {
   public void setAssignments(List<Assignment> assignments) {
     this.assignments = assignments;
   }
+
   
 }

@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,12 +15,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "tb_m_user")
 public class User {
-
-  @Column(name ="username")
+  @Column
   private String username;
 
-  @Column(name ="password")
+  @Column
   private String password;
+
+  @Column(name = "is_admin")
+  private Boolean isAdmin;
 
   @Id
   @Column
@@ -32,16 +35,20 @@ public class User {
 
   @OneToMany(mappedBy = "user")
   @JsonIgnore
-  private List<CourseUserRole> courseUserRoles;
+  private List<Progress> progresses;
 
+  @OneToMany(mappedBy = "user")
+  @JsonIgnore
+  private List<AssignmentSubmission> assignmentSubmissions;
 
   public User() {
   }
 
-  public User(String username, String password, Employee employee) {
+  public User(String username, String password, Boolean isAdmin, Integer id) {
     this.username = username;
     this.password = password;
-    this.employee = employee;
+    this.isAdmin = isAdmin;
+    this.id = id;
   }
 
   public String getUsername() {
@@ -60,6 +67,14 @@ public class User {
     this.password = password;
   }
 
+  public Boolean getIsAdmin() {
+    return isAdmin;
+  }
+
+  public void setIsAdmin(Boolean isAdmin) {
+    this.isAdmin = isAdmin;
+  }
+
   public Integer getId() {
     return id;
   }
@@ -76,14 +91,20 @@ public class User {
     this.employee = employee;
   }
 
-  public List<CourseUserRole> getCourseUserRoles() {
-    return courseUserRoles;
+  public List<Progress> getProgresses() {
+    return progresses;
   }
 
-  public void setCourseUserRoles(List<CourseUserRole> courseUserRoles) {
-    this.courseUserRoles = courseUserRoles;
+  public void setProgresses(List<Progress> progresses) {
+    this.progresses = progresses;
   }
 
-  
-  
+  public List<AssignmentSubmission> getAssignmentSubmissions() {
+    return assignmentSubmissions;
+  }
+
+  public void setAssignmentSubmissions(List<AssignmentSubmission> assignmentSubmissions) {
+    this.assignmentSubmissions = assignmentSubmissions;
+  } 
+
 }

@@ -24,20 +24,23 @@ public class Employee {
   @Column
   private Integer id;
 
-  @Column
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private LocalDate bod;
-
   @Column(name ="first_name")
   private String firstName;
+
+  @Column(name ="middle_name")
+  private String middleName;
 
   @Column(name ="last_name")
   private String lastName;
 
   @Column
-  private String gender;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate dob;
 
   @Column
+  private Integer gender;
+
+  @Column(columnDefinition = "TEXT")
   private String address;
 
   @Column
@@ -45,8 +48,6 @@ public class Employee {
 
   @Column
   private String email;
-
-  //dept head id
 
   @ManyToOne
   @JoinColumn(name = "dept_id", referencedColumnName = "id")
@@ -60,97 +61,127 @@ public class Employee {
   public Employee() {
   }
 
-  public Employee(Integer id, LocalDate bod, String firstName, String lastName, String gender, String address,
-      String phone, String email, Department department) {
+
+  public Employee(Integer id, String firstName, String middleName, String lastName, LocalDate dob, Integer gender,
+      String address, String phone, String email) {
     this.id = id;
-    this.bod = bod;
     this.firstName = firstName;
+    this.middleName = middleName;
     this.lastName = lastName;
+    this.dob = dob;
     this.gender = gender;
     this.address = address;
     this.phone = phone;
     this.email = email;
-    this.department = department;
   }
 
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
 
   public Integer getId() {
     return id;
   }
 
+
   public void setId(Integer id) {
     this.id = id;
   }
 
-  public LocalDate getBod() {
-    return bod;
-  }
-
-  public void setBod(LocalDate bod) {
-    this.bod = bod;
-  }
-
-  public String getGender() {
-    return gender;
-  }
-
-  public void setGender(String gender) {
-    this.gender = gender;
-  }
-
-  public String getAddress() {
-    return address;
-  }
-
-  public void setAddress(String address) {
-    this.address = address;
-  }
-
-  public String getPhone() {
-    return phone;
-  }
-
-  public void setPhone(String phone) {
-    this.phone = phone;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public Department getDepartment() {
-    return department;
-  }
-
-  public void setDepartment(Department department) {
-    this.department = department;
-  }
 
   public String getFirstName() {
     return firstName;
   }
 
+
   public void setFirstName(String firstName) {
     this.firstName = firstName;
   }
+
+
+  public String getMiddleName() {
+    return middleName;
+  }
+
+
+  public void setMiddleName(String middleName) {
+    this.middleName = middleName;
+  }
+
 
   public String getLastName() {
     return lastName;
   }
 
+
   public void setLastName(String lastName) {
     this.lastName = lastName;
+  } 
+
+  public Integer getGender() {
+    return gender;
   }
+
+
+  public void setGender(Integer gender) {
+    this.gender = gender;
+  }
+
+
+  public String getAddress() {
+    return address;
+  }
+
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+
+  public String getPhone() {
+    return phone;
+  }
+
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+
+  public String getEmail() {
+    return email;
+  }
+
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+
+  public Department getDepartment() {
+    return department;
+  }
+
+
+  public void setDepartment(Department department) {
+    this.department = department;
+  }
+
+
+  public User getUser() {
+    return user;
+  }
+
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+
+  public LocalDate getDob() {
+    return dob;
+  }
+
+  public void setDob(LocalDate dob) {
+    this.dob = dob;
+  }
+ 
   
 }
