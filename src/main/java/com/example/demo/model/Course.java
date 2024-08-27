@@ -26,19 +26,30 @@ public class Course {
   @Column
   private String name;
 
-  @Column(name = "begin_course")
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private LocalDate beginCourse;
-
-  @Column(name = "end_course")
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private LocalDate endCourse;
-
   @OneToMany(mappedBy = "course")
   @JsonIgnore
   List<Material> materials;
 
+  @Column
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate begin;
+
+  @Column
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate end;
+
+  @OneToMany(mappedBy = "course")
+  @JsonIgnore
+  private List<CourseUserRole> courseUserRoles;
+
   public Course() {
+  }
+
+  public Course(Integer id, String name, LocalDate begin, LocalDate end) {
+    this.id = id;
+    this.name = name;
+    this.begin = begin;
+    this.end = end;
 
   }
 
@@ -58,22 +69,6 @@ public class Course {
     this.name = name;
   }
 
-  public LocalDate getBeginCourse() {
-    return beginCourse;
-  }
-
-  public void setBeginCourse(LocalDate beginCourse) {
-    this.beginCourse = beginCourse;
-  }
-
-  public LocalDate getEndCourse() {
-    return endCourse;
-  }
-
-  public void setEndCourse(LocalDate endCourse) {
-    this.endCourse = endCourse;
-  }
-
   public List<Material> getMaterials() {
     return materials;
   }
@@ -82,5 +77,28 @@ public class Course {
     this.materials = materials;
   }
 
-  
+  public LocalDate getBegin() {
+    return begin;
+  }
+
+  public void setBegin(LocalDate begin) {
+    this.begin = begin;
+  }
+
+  public LocalDate getEnd() {
+    return end;
+  }
+
+  public void setEnd(LocalDate end) {
+    this.end = end;
+  }
+
+  public List<CourseUserRole> getCourseUserRoles() {
+    return courseUserRoles;
+  }
+
+  public void setCourseUserRoles(List<CourseUserRole> courseUserRoles) {
+    this.courseUserRoles = courseUserRoles;
+  }
+
 }

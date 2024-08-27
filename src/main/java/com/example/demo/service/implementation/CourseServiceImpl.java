@@ -34,6 +34,5 @@ public class CourseServiceImpl implements CourseService{
   public Boolean delete(Integer id) {
     courseRepository.deleteById(id);
     return courseRepository.findById(id).isEmpty();
-  }
-  
+  }  
 }
