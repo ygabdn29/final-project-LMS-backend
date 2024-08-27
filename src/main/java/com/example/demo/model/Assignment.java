@@ -40,18 +40,20 @@ public class Assignment {
   
   @OneToMany(mappedBy = "assignment")
   @JsonIgnore
-  private List<Assignment> assignments;
+  private List<AssignmentSubmission> assignmentSubmission;
 
   public Assignment() {
-  }  
+  }
 
-  public Assignment(Integer id, String name, String content, Integer passingScore, Integer dueDate, Material material) {
+  public Assignment(Integer id, String name, String content, Integer passingScore, Integer dueDate, Material material,
+      List<AssignmentSubmission> assignmentSubmission) {
     this.id = id;
     this.name = name;
     this.content = content;
     this.passingScore = passingScore;
     this.dueDate = dueDate;
     this.material = material;
+    this.assignmentSubmission = assignmentSubmission;
   }
 
   public Integer getId() {
@@ -102,13 +104,15 @@ public class Assignment {
     this.material = material;
   }
 
-  public List<Assignment> getAssignments() {
-    return assignments;
+  public List<AssignmentSubmission> getAssignmentSubmission() {
+    return assignmentSubmission;
   }
 
-  public void setAssignments(List<Assignment> assignments) {
-    this.assignments = assignments;
-  }
+  public void setAssignmentSubmission(List<AssignmentSubmission> assignmentSubmission) {
+    this.assignmentSubmission = assignmentSubmission;
+  }  
+
+  
 
   
 }
