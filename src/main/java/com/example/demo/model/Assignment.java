@@ -47,14 +47,14 @@ public class Assignment {
   }
 
   public Assignment(Integer id, String name, String content, Integer passingScore, Integer dueDate, Material material,
-      List<AssignmentSubmission> assignmentSubmission) {
+      List<AssignmentSubmission> assignmentSubmissions) {
     this.id = id;
     this.name = name;
     this.content = content;
     this.passingScore = passingScore;
     this.dueDate = dueDate;
     this.material = material;
-    this.assignmentSubmission = assignmentSubmission;
+    this.assignmentSubmissions = assignmentSubmissions;
   }
 
   public Integer getId() {
