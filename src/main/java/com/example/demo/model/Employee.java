@@ -61,7 +61,6 @@ public class Employee {
   public Employee() {
   }
 
-
   public Employee(Integer id, String firstName, String middleName, String lastName, LocalDate dob, Integer gender,
       String address, String phone, String email, Department department) {
     this.id = id;
@@ -75,7 +74,6 @@ public class Employee {
     this.email = email;
     this.department = department;
   }
-
 
   public Integer getId() {
     return id;

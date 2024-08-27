@@ -10,13 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.handler.Utils;
-import com.example.demo.model.Course;
 import com.example.demo.model.Department;
 import com.example.demo.model.Employee;
 import com.example.demo.model.User;
-import com.example.demo.model.dto.NewCourseDTO;
 import com.example.demo.model.dto.RegistrationDTO;
-import com.example.demo.service.CourseService;
 import com.example.demo.service.DepartmentService;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.service.UserService;
@@ -29,10 +26,12 @@ public class AccountRestController {
 
   @Autowired
   private EmployeeService employeeService;
+  
+  @Autowired
+  private DepartmentService departmentService;
 
   @Autowired
   private UserService userService;
-
 
   @PostMapping("/login")
   public ResponseEntity<Object> login(@RequestBody User userLogin){
@@ -43,5 +42,23 @@ public class AccountRestController {
     }
 
     return Utils.generateResponseEntity(HttpStatus.OK, "Login Success!");
+  }
+
+  @PostMapping("/register")
+  public ResponseEntity<Object> register(@RequestBody RegistrationDTO registrationDTO) {
+    Department department = departmentService.get(registrationDTO.getDepartment_id());
+    try {
+      Employee employee = new Employee(null, registrationDTO.getFirstName(), registrationDTO.getMiddleName(), registrationDTO.getLastName(), registrationDTO.getBirthDate(), registrationDTO.getGender(), registrationDTO.getAddress(), registrationDTO.getPhone(), registrationDTO.getEmail(), department);
+      employeeService.save(employee);
+
+      String username = registrationDTO.getFirstName() + "." + registrationDTO.getLastName();
+      // default isAdmin is false,
+      User user = new User(username, passwordEncoder.encode(registrationDTO.getPassword()), false, null, employee);
+      userService.save(user);
+
+      return Utils.generateResponseEntity(HttpStatus.OK, "Registration Successful.");
+    } catch (Exception e) {
+      return Utils.generateResponseEntity(HttpStatus.OK, "Registration Failed: " + e.getMessage());
+    }
   }
 }
