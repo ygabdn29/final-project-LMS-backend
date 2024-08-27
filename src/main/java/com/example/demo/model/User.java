@@ -44,11 +44,12 @@ public class User {
   public User() {
   }
 
-  public User(String username, String password, Boolean isAdmin, Integer id) {
+  public User(String username, String password, Boolean isAdmin, Integer id, Employee employee) {
     this.username = username;
     this.password = password;
     this.isAdmin = isAdmin;
     this.id = id;
+    this.employee = employee;
   }
 
   public String getUsername() {
