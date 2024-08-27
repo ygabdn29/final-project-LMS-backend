@@ -51,7 +51,7 @@ public class Course {
   private List<Progress> progresses;
   
   @OneToOne
-  @JoinColumn(name = "mentor_id", referencedColumnName = "id")
+  @JoinColumn(name = "mentor_id", referencedColumnName = "employee_id")
   private User mentor;
 
   public Course() {
