@@ -97,10 +97,4 @@ public class AssignmentSubmission {
     this.assignment = assignment;
   }
 
-  
-  
-  
-
-
-
 }
