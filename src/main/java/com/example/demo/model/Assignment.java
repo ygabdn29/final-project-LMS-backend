@@ -102,6 +102,7 @@ public class Assignment {
     this.material = material;
   }
 
+
   public List<AssignmentSubmission> getAssignmentSubmissions() {
     return assignmentSubmissions;
   }
@@ -109,8 +110,4 @@ public class Assignment {
   public void setAssignmentSubmissions(List<AssignmentSubmission> assignmentSubmissions) {
     this.assignmentSubmissions = assignmentSubmissions;
   }
-
-  
-
-  
 }
