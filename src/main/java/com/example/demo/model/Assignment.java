@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -32,7 +33,7 @@ public class Assignment {
   private Integer passingScore;
 
   @Column(name = "due_date")
-  private Integer dueDate;
+  private LocalDate dueDate;
 
   @ManyToOne
   @JoinColumn(name = "material_id", referencedColumnName = "id")
@@ -46,15 +47,13 @@ public class Assignment {
   public Assignment() {
   }
 
-  public Assignment(Integer id, String name, String content, Integer passingScore, Integer dueDate, Material material,
-      List<AssignmentSubmission> assignmentSubmissions) {
+  public Assignment(Integer id, String name, String content, Integer passingScore, LocalDate dueDate, Material material) {
     this.id = id;
     this.name = name;
     this.content = content;
     this.passingScore = passingScore;
     this.dueDate = dueDate;
     this.material = material;
-    this.assignmentSubmissions = assignmentSubmissions;
   }
 
   public Integer getId() {
@@ -89,11 +88,11 @@ public class Assignment {
     this.passingScore = passingScore;
   }
 
-  public Integer getDueDate() {
+  public LocalDate getDueDate() {
     return dueDate;
   }
 
-  public void setDueDate(Integer dueDate) {
+  public void setDueDate(LocalDate dueDate) {
     this.dueDate = dueDate;
   }
 

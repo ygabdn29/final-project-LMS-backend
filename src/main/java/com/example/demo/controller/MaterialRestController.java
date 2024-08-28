@@ -8,8 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.model.Assignment;
 import com.example.demo.model.Course;
 import com.example.demo.model.Material;
+import com.example.demo.model.dto.NewAssignmentDTO;
+import com.example.demo.service.AssignmentService;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.MaterialService;
 
@@ -30,6 +33,9 @@ public class MaterialRestController {
 
   @Autowired
   private CourseService courseService;
+
+  @Autowired
+  private AssignmentService assignmentService;
 
   @GetMapping("/{id}/materials")
   public ResponseEntity<Object> get(@PathVariable Integer id) {
@@ -131,6 +137,38 @@ public class MaterialRestController {
       return Utils.generateResponseEntity(HttpStatus.OK, "Material Has Been Deleted");
     } catch (Exception e) {
       return Utils.generateResponseEntity(HttpStatus.OK, "Failed to Delete Data Materials" + e.getMessage());
+    }
+  }
+
+  @GetMapping("/{courseId}/materials/{materialId}/assignments")
+  public ResponseEntity<Object> getCourseAssignment(@PathVariable Integer materialId){
+    try{
+      List<Assignment> assignments = assignmentService.getMaterialAssignments(materialId);
+      return Utils.generateResponseEntity(HttpStatus.OK, "Assignments for this Material retrieved.", assignments);
+    } catch(Exception e){
+      return Utils.generateResponseEntity(HttpStatus.OK, "Cannot retrieve assignments for this material");
+    }
+  }
+
+  @PostMapping("/{courseId}/materials/{materialId}/assignment/save")
+  public ResponseEntity<Object> addAssignment(@RequestBody NewAssignmentDTO newAssignmentDTO) {
+    try {
+      Material material = materialService.get(newAssignmentDTO.getMaterialId());
+      Assignment newAssignment = new Assignment(null, newAssignmentDTO.getName(), newAssignmentDTO.getContent(), newAssignmentDTO.getPassingScore(), newAssignmentDTO.getDueDate(), material);
+      assignmentService.save(newAssignment);
+      return Utils.generateResponseEntity(HttpStatus.OK, "New Assignment Added Successfully.");
+    } catch (Exception e) {
+      return Utils.generateResponseEntity(HttpStatus.OK, e.getMessage());
+    }
+  }
+  
+  @DeleteMapping("/{courseId}/materials/{materialId}/assignment/{assignmentId}")
+  public ResponseEntity<Object> deleteAssignment(@PathVariable Integer assignmentId){
+    try {
+      assignmentService.delete(assignmentId);
+      return Utils.generateResponseEntity(HttpStatus.OK, "Assignment Deleted Successfully");
+    } catch (Exception e) {
+      return Utils.generateResponseEntity(HttpStatus.OK, e.getMessage());
     }
   }
 }
