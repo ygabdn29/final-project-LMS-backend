@@ -77,6 +77,7 @@ public class AssigmentSubmissionRestController {
       submission.setAssignment(assignment);
       submission.setAnswer(answer);
       submission.setUser(user);
+      submission.setIsPassed(false);
 
       assignmentSubmissionService.save(submission);
 
