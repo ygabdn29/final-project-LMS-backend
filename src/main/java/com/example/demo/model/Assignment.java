@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -11,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,7 +35,8 @@ public class Assignment {
   private Integer passingScore;
 
   @Column(name = "due_date")
-  private Integer dueDate;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate dueDate;
 
   @ManyToOne
   @JoinColumn(name = "material_id", referencedColumnName = "id")
@@ -46,7 +50,7 @@ public class Assignment {
   public Assignment() {
   }
 
-  public Assignment(Integer id, String name, String content, Integer passingScore, Integer dueDate, Material material,
+  public Assignment(Integer id, String name, String content, Integer passingScore, LocalDate dueDate, Material material,
       List<AssignmentSubmission> assignmentSubmissions) {
     this.id = id;
     this.name = name;
@@ -89,11 +93,11 @@ public class Assignment {
     this.passingScore = passingScore;
   }
 
-  public Integer getDueDate() {
+  public LocalDate getDueDate() {
     return dueDate;
   }
 
-  public void setDueDate(Integer dueDate) {
+  public void setDueDate(LocalDate dueDate) {
     this.dueDate = dueDate;
   }
 
