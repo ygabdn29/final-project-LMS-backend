@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.Assignment;
 import com.example.demo.model.Course;
 import com.example.demo.model.Material;
-import com.example.demo.model.dto.NewAssignmentDTO;
+import com.example.demo.model.dto.AssignmentDTO;
 import com.example.demo.service.AssignmentService;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.MaterialService;
@@ -140,6 +140,7 @@ public class MaterialRestController {
     }
   }
 
+  // Assignment
   @GetMapping("/{courseId}/materials/{materialId}/assignments")
   public ResponseEntity<Object> getCourseAssignment(@PathVariable Integer materialId){
     try{
@@ -151,12 +152,12 @@ public class MaterialRestController {
   }
 
   @PostMapping("/{courseId}/materials/{materialId}/assignment/save")
-  public ResponseEntity<Object> addAssignment(@RequestBody NewAssignmentDTO newAssignmentDTO) {
+  public ResponseEntity<Object> addAssignment(@RequestBody AssignmentDTO assignmentDTO) {
     try {
-      Material material = materialService.get(newAssignmentDTO.getMaterialId());
-      Assignment newAssignment = new Assignment(null, newAssignmentDTO.getName(), newAssignmentDTO.getContent(), newAssignmentDTO.getPassingScore(), newAssignmentDTO.getDueDate(), material);
+      Material material = materialService.get(assignmentDTO.getMaterialId());
+      Assignment newAssignment = new Assignment(assignmentDTO.getId(), assignmentDTO.getName(), assignmentDTO.getContent(), assignmentDTO.getPassingScore(), assignmentDTO.getDueDate(), material);
       assignmentService.save(newAssignment);
-      return Utils.generateResponseEntity(HttpStatus.OK, "New Assignment Added Successfully.");
+      return Utils.generateResponseEntity(HttpStatus.OK, "Success");
     } catch (Exception e) {
       return Utils.generateResponseEntity(HttpStatus.OK, e.getMessage());
     }
@@ -171,4 +172,5 @@ public class MaterialRestController {
       return Utils.generateResponseEntity(HttpStatus.OK, e.getMessage());
     }
   }
+  
 }

@@ -2,21 +2,32 @@ package com.example.demo.model.dto;
 
 import java.time.LocalDate;
 
-public class NewAssignmentDTO {
+public class AssignmentDTO {
+  private Integer id;
   private String content;
   private LocalDate dueDate;
   private String name;
   private Integer passingScore;
   private Integer materialId;
 
-  public NewAssignmentDTO(){}
+  public AssignmentDTO(){}
 
-  public NewAssignmentDTO(String content, LocalDate dueDate, String name, Integer passingScore, Integer materialId) {
+  public AssignmentDTO(Integer id, String content, LocalDate dueDate, String name, Integer passingScore,
+      Integer materialId) {
+    this.id = id;
     this.content = content;
     this.dueDate = dueDate;
     this.name = name;
     this.passingScore = passingScore;
     this.materialId = materialId;
+  }
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
   }
 
   public String getContent() {
@@ -47,7 +58,7 @@ public class NewAssignmentDTO {
     return passingScore;
   }
 
-  public void setPassing_score(Integer passingScore) {
+  public void setPassingScore(Integer passingScore) {
     this.passingScore = passingScore;
   }
 
@@ -58,6 +69,8 @@ public class NewAssignmentDTO {
   public void setMaterialId(Integer materialId) {
     this.materialId = materialId;
   }
+
+  
 
   
 }
