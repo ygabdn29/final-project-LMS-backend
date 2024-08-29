@@ -34,7 +34,7 @@ public class AssignmentSubmission {
   public AssignmentSubmission() {
   }
 
-  public AssignmentSubmission(Integer id, String answer, Float score, Boolean isPassed, User user,
+  public AssignmentSubmission(Integer id, String answer, Float score, User user,
       Assignment assignment) {
     this.id = id;
     this.answer = answer;
@@ -58,7 +58,6 @@ public class AssignmentSubmission {
   public void setAnswer(String answer) {
     this.answer = answer;
   }  
-
 
   public User getUser() {
     return user;

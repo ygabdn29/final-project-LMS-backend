@@ -38,7 +38,7 @@ public class User {
   private Employee employee;
 
   @OneToOne
-  @JoinColumn(name="role_id", referencedColumnName = "id")
+  @JoinColumn(name = "role_id", referencedColumnName = "id")
   private Role role;
 
   @OneToMany(mappedBy = "user")
