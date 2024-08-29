@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.handler.Utils;
 import com.example.demo.model.Course;
+import com.example.demo.model.Progress;
 import com.example.demo.model.User;
 import com.example.demo.model.dto.NewCourseDTO;
 import com.example.demo.service.CourseService;
+import com.example.demo.service.ProgressService;
 import com.example.demo.service.UserService;
+
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("api/course")
@@ -27,6 +34,9 @@ public class CourseRestController {
 
   @Autowired
   private CourseService courseService;
+  
+  @Autowired
+  private ProgressService progressService;
 
   @PostMapping("create")
   public ResponseEntity<Object> newCourse(@RequestBody NewCourseDTO newCourseDTO) {
@@ -81,4 +91,25 @@ public class CourseRestController {
     }
   }
 
+  @PostMapping("{courseId}/enroll")
+  public ResponseEntity<Object> enrollCourse(@PathVariable Integer courseId, @RequestHeader Integer userId){
+    Integer selectedCourseQuota = courseService.get(courseId).getQuota();
+    List<Progress> courseProgressUsers = progressService.findProgressByCourseId(courseId);
+    Integer courseProgressUser = courseProgressUsers.size();
+
+    if(courseProgressUser >= selectedCourseQuota) {
+      return Utils.generateResponseEntity(HttpStatus.OK, "Course is Full");
+    }
+
+    try {
+      User user = userService.get(userId);
+      Course course = courseService.get(courseId);
+      Progress newProgress = new Progress(null, LocalDate.now(), null, null, null, user, course);
+      progressService.save(newProgress);
+
+      return Utils.generateResponseEntity(HttpStatus.OK, "Enroll Success");
+    } catch (Exception e) {
+      return Utils.generateResponseEntity(HttpStatus.OK, e.getMessage());
+    }
+  }
 }
