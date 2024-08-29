@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -11,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -29,10 +32,11 @@ public class Assignment {
   private String content;
 
   @Column(name = "passing_score")
-  private Integer passingScore;
+  private Float passingScore;
 
   @Column(name = "due_date")
-  private Integer dueDate;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate dueDate;
 
   @ManyToOne
   @JoinColumn(name = "material_id", referencedColumnName = "id")
@@ -46,15 +50,13 @@ public class Assignment {
   public Assignment() {
   }
 
-  public Assignment(Integer id, String name, String content, Integer passingScore, Integer dueDate, Material material,
-      List<AssignmentSubmission> assignmentSubmissions) {
+  public Assignment(Integer id, String name, String content, Float passingScore, LocalDate dueDate, Material material) {
     this.id = id;
     this.name = name;
     this.content = content;
     this.passingScore = passingScore;
     this.dueDate = dueDate;
     this.material = material;
-    this.assignmentSubmissions = assignmentSubmissions;
   }
 
   public Integer getId() {
@@ -81,19 +83,19 @@ public class Assignment {
     this.content = content;
   }
 
-  public Integer getPassingScore() {
+  public Float getPassingScore() {
     return passingScore;
   }
 
-  public void setPassingScore(Integer passingScore) {
+  public void setPassingScore(Float passingScore) {
     this.passingScore = passingScore;
   }
 
-  public Integer getDueDate() {
+  public LocalDate getDueDate() {
     return dueDate;
   }
 
-  public void setDueDate(Integer dueDate) {
+  public void setDueDate(LocalDate dueDate) {
     this.dueDate = dueDate;
   }
 
