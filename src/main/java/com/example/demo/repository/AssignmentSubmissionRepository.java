@@ -7,5 +7,4 @@ import com.example.demo.model.AssignmentSubmission;
 
 @Repository
 public interface AssignmentSubmissionRepository extends JpaRepository<AssignmentSubmission, Integer>{
-  
 }

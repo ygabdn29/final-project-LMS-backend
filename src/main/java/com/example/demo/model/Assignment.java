@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
