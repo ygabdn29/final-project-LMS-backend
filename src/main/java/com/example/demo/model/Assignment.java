@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.time.LocalDate;
 
@@ -50,15 +51,13 @@ public class Assignment {
   public Assignment() {
   }
 
-  public Assignment(Integer id, String name, String content, Integer passingScore, LocalDate dueDate, Material material,
-      List<AssignmentSubmission> assignmentSubmissions) {
+  public Assignment(Integer id, String name, String content, Integer passingScore, LocalDate dueDate, Material material) {
     this.id = id;
     this.name = name;
     this.content = content;
     this.passingScore = passingScore;
     this.dueDate = dueDate;
     this.material = material;
-    this.assignmentSubmissions = assignmentSubmissions;
   }
 
   public Integer getId() {

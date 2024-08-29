@@ -10,14 +10,13 @@ import com.example.demo.repository.AssignmentRepository;
 import com.example.demo.service.AssignmentService;
 
 @Service
-public class AssignmentServiceImpl implements AssignmentService{
+public class AssignmentServiceImpl implements AssignmentService {
   @Autowired
   private AssignmentRepository assignmentRepository;
 
   @Override
   public List<Assignment> get() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'get'");
+    return assignmentRepository.findAll();
   }
 
   @Override
@@ -27,14 +26,19 @@ public class AssignmentServiceImpl implements AssignmentService{
 
   @Override
   public Boolean save(Assignment entity) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'save'");
+    assignmentRepository.save(entity);
+    return assignmentRepository.findById(entity.getId()).isPresent();
   }
 
   @Override
   public Boolean delete(Integer id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    assignmentRepository.deleteById(id);
+    return assignmentRepository.findById(id).isEmpty();
   }
-  
+
+  @Override
+  public List<Assignment> getMaterialAssignments(Integer materialId) {
+    List<Assignment> materialAssignment = assignmentRepository.findByMaterialId(materialId);
+    return materialAssignment;
+  }
 }

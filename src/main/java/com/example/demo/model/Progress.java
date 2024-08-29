@@ -43,12 +43,14 @@ public class Progress {
   public Progress() {
   }
 
-  public Progress(Integer id, LocalDate begin, LocalDate end, Integer batch, Integer progress) {
+  public Progress(Integer id, LocalDate begin, LocalDate end, Integer batch, Integer progress, User user, Course course) {
     this.id = id;
     this.begin = begin;
     this.end = end;
     this.batch = batch;
     this.progress = progress;
+    this.user = user;
+    this.course = course;
   }
 
   public Integer getId() {

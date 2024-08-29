@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.model.Assignment;
+import com.example.demo.model.Progress;
 
 @Repository
-public interface AssignmentRepository extends JpaRepository<Assignment, Integer> {
-  List<Assignment> findByMaterialId(Integer materialId);
+public interface ProgressRepository extends JpaRepository<Progress, Integer> {
+  List<Progress> findByCourseId(Integer courseId);
 }
