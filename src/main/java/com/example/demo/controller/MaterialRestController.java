@@ -35,7 +35,6 @@ public class MaterialRestController {
   public ResponseEntity<Object> get(@PathVariable Integer id) {
     try {
       Course course = courseService.get(id);
-
       if (course == null) {
         return Utils.generateResponseEntity(HttpStatus.OK, "Course not found");
       }
@@ -53,7 +52,6 @@ public class MaterialRestController {
     try {
 
       Course course = courseService.get(courseId);
-
       if (course == null) {
         return Utils.generateResponseEntity(HttpStatus.OK, "Course not found");
       }
@@ -73,13 +71,11 @@ public class MaterialRestController {
   public ResponseEntity<Object> addMaterial(@PathVariable Integer id, @RequestBody Material material) {
     try {
       Course course = courseService.get(id);
-
       if (course == null) {
         return Utils.generateResponseEntity(HttpStatus.OK, "Course not found");
       }
 
       material.setCourse(course);
-
       materialService.save(material);
 
       return Utils.generateResponseEntity(HttpStatus.OK, "Add Material Successfully");
@@ -93,13 +89,11 @@ public class MaterialRestController {
       @RequestBody Material material) {
     try {
       Course course = courseService.get(courseId);
-
       if (course == null) {
         return Utils.generateResponseEntity(HttpStatus.OK, "Course not found");
       }
 
       Material selectMaterial = materialService.get(materialId);
-
       if (selectMaterial == null) {
         return Utils.generateResponseEntity(HttpStatus.OK, "Material not found");
       }
@@ -122,7 +116,6 @@ public class MaterialRestController {
   public ResponseEntity<Object> delete(@PathVariable Integer courseId, @PathVariable Integer materialId) {
     try {
       Course course = courseService.get(courseId);
-
       if (course == null) {
         return Utils.generateResponseEntity(HttpStatus.OK, "Course not found");
       }
