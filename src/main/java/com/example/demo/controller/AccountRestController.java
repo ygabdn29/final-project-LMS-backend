@@ -13,11 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.handler.Utils;
 import com.example.demo.model.Department;
 import com.example.demo.model.Employee;
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.model.dto.RegistrationDTO;
 import com.example.demo.service.DepartmentService;
+import com.example.demo.service.EmailService;
 import com.example.demo.service.EmployeeService;
+import com.example.demo.service.RoleService;
 import com.example.demo.service.UserService;
+import java.util.UUID;
+
 
 
 @RestController
@@ -34,6 +39,12 @@ public class AccountRestController {
 
   @Autowired
   private UserService userService;
+
+  @Autowired
+  private RoleService roleService;
+
+  @Autowired
+  private EmailService emailService;
 
   @PostMapping("/login")
   public ResponseEntity<Object> login(@RequestBody User userLogin){
@@ -54,11 +65,19 @@ public class AccountRestController {
       employeeService.save(employee);
 
       String username = registrationDTO.getFirstName() + "." + registrationDTO.getLastName();
-      // default isAdmin is false,
-      User user = new User(username, passwordEncoder.encode(registrationDTO.getPassword()), false, null, employee);
+      Role role = roleService.findByName("Mentee");
+      String guid = UUID.randomUUID().toString();
+      User user = new User(username, passwordEncoder.encode(registrationDTO.getPassword()) , null, employee, role);
+      user.setGuid(guid);
       userService.save(user);
 
-      return Utils.generateResponseEntity(HttpStatus.OK, "Registration Successful.");
+      String subject = "Email Verification";
+      // Ini harus diubah ke link halaman react
+      String confirmationUrl = "http://localhost:3000/verify/" + user.getGuid();
+      String message = "Click the link to verify your email: \n" + confirmationUrl;
+      emailService.sendEmail(employee.getEmail(), subject, message);
+
+      return Utils.generateResponseEntity(HttpStatus.OK, "Registration Successful. A verification email has been sent to your email address.");
     } catch (Exception e) {
       return Utils.generateResponseEntity(HttpStatus.OK, "Registration Failed: " + e.getMessage());
     }
