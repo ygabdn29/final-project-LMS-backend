@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,8 +12,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -26,46 +23,32 @@ public class Course {
   private Integer id;
 
   @Column
-  private String name;
+  private String title;
 
   @Column
   private String description;
-
-  @Column
-  private Integer quota;
-
-  @Column
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private LocalDate begin;
-
-  @Column
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private LocalDate end;
 
   @OneToMany(mappedBy = "course")
   @JsonIgnore
   private List<Material> materials;
 
-  @OneToMany(mappedBy = "course")
-  @JsonIgnore
-  private List<Progress> progresses;
-  
   @OneToOne
   @JoinColumn(name = "mentor_id", referencedColumnName = "employee_id")
   private User mentor;
 
-  public Course() {
-  }
+  @OneToOne
+  @JoinColumn(name = "role_id", referencedColumnName = "id")
+  private Role role;
 
-  public Course(Integer id, String name, String description, Integer quota, LocalDate begin, LocalDate end,
-      User mentor) {
+  public Course() {
+  } 
+
+  public Course(Integer id, String title, String description, User mentor, Role role) {
     this.id = id;
-    this.name = name;
+    this.title = title;
     this.description = description;
-    this.quota = quota;
-    this.begin = begin;
-    this.end = end;
     this.mentor = mentor;
+    this.role = role;
   }
 
   public Integer getId() {
@@ -76,12 +59,12 @@ public class Course {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public String getTitle() {
+    return title;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   public List<Material> getMaterials() {
@@ -92,44 +75,12 @@ public class Course {
     this.materials = materials;
   }
 
-  public LocalDate getBegin() {
-    return begin;
-  }
-
-  public void setBegin(LocalDate begin) {
-    this.begin = begin;
-  }
-
-  public LocalDate getEnd() {
-    return end;
-  }
-
-  public void setEnd(LocalDate end) {
-    this.end = end;
-  }
-
   public String getDescription() {
     return description;
   }
 
   public void setDescription(String description) {
     this.description = description;
-  }
-
-  public Integer getQuota() {
-    return quota;
-  }
-
-  public void setQuota(Integer quota) {
-    this.quota = quota;
-  }
-
-  public List<Progress> getProgresses() {
-    return progresses;
-  }
-
-  public void setProgresses(List<Progress> progresses) {
-    this.progresses = progresses;
   }
 
   public User getMentor() {
@@ -140,6 +91,12 @@ public class Course {
     this.mentor = mentor;
   }
 
-  
+  public Role getRole() {
+    return role;
+  }
 
+  public void setRole(Role role) {
+    this.role = role;
+  }
+  
 }
