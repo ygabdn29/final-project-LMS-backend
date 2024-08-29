@@ -35,10 +35,6 @@ public class User {
 
   @OneToMany(mappedBy = "user")
   @JsonIgnore
-  private List<Progress> progresses;
-
-  @OneToMany(mappedBy = "user")
-  @JsonIgnore
   private List<AssignmentSubmission> assignmentSubmissions;
 
   public User() {
@@ -90,14 +86,6 @@ public class User {
 
   public void setEmployee(Employee employee) {
     this.employee = employee;
-  }
-
-  public List<Progress> getProgresses() {
-    return progresses;
-  }
-
-  public void setProgresses(List<Progress> progresses) {
-    this.progresses = progresses;
   }
 
   public List<AssignmentSubmission> getAssignmentSubmissions() {
