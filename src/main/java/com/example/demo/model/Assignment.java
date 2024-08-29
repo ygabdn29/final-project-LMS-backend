@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -33,6 +35,7 @@ public class Assignment {
   private Integer passingScore;
 
   @Column(name = "due_date")
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate dueDate;
 
   @ManyToOne

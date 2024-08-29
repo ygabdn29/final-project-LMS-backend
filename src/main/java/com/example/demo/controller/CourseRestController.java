@@ -40,8 +40,11 @@ public class CourseRestController {
 
   @PostMapping("create")
   public ResponseEntity<Object> newCourse(@RequestBody NewCourseDTO newCourseDTO) {
-    User mentor = userService.get(newCourseDTO.getMentorId());
     try {
+      User mentor = userService.get(newCourseDTO.getMentorId());
+      if (mentor == null) {
+        return Utils.generateResponseEntity(HttpStatus.OK, "User not found");
+      }
       Course course = new Course(null, newCourseDTO.getName(), newCourseDTO.getDescription(), newCourseDTO.getQuota(),
           newCourseDTO.getBegin(), newCourseDTO.getEnd(), mentor);
       courseService.save(course);
@@ -66,14 +69,18 @@ public class CourseRestController {
 
   @PostMapping("update")
   public ResponseEntity<Object> updateCourse(@RequestBody NewCourseDTO newCourseDTO) {
-    User newMentor = userService.get(newCourseDTO.getMentorId());
-    Course course = courseService.get(newCourseDTO.getId());
     try {
+      User newMentor = userService.get(newCourseDTO.getMentorId());
+      Course course = courseService.get(newCourseDTO.getId());
       if (course == null) {
         return Utils.generateResponseEntity(HttpStatus.OK, "Course not found");
       }
-      Course updatedCourse = new Course(newCourseDTO.getId(), newCourseDTO.getName(), newCourseDTO.getDescription(), newCourseDTO.getQuota(),
-      newCourseDTO.getBegin(), newCourseDTO.getEnd(), newMentor);
+      if (newMentor == null) {
+        return Utils.generateResponseEntity(HttpStatus.OK, "User not found");
+      }
+      Course updatedCourse = new Course(newCourseDTO.getId(), newCourseDTO.getName(), newCourseDTO.getDescription(),
+          newCourseDTO.getQuota(),
+          newCourseDTO.getBegin(), newCourseDTO.getEnd(), newMentor);
       courseService.save(updatedCourse);
       return Utils.generateResponseEntity(HttpStatus.OK, "Course updated successfully");
     } catch (Exception e) {
