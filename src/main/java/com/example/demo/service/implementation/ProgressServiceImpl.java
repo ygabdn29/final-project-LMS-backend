@@ -10,7 +10,7 @@ import com.example.demo.repository.ProgressRepository;
 import com.example.demo.service.ProgressService;
 
 @Service
-public class ProgressServiceImpl implements ProgressService {
+public class ProgressServiceImpl implements ProgressService{
   @Autowired
   private ProgressRepository progressRepository;
 
@@ -34,6 +34,12 @@ public class ProgressServiceImpl implements ProgressService {
   public Boolean delete(Integer id) {
     progressRepository.deleteById(id);
     return progressRepository.findById(id).isEmpty();
+  }
+
+  @Override
+  public List<Progress> findProgressByCourseId(Integer courseId) {
+    List<Progress> progresses = progressRepository.findByCourseId(courseId);
+    return progresses;
   }
   
 }

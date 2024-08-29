@@ -35,5 +35,10 @@ public class AssignmentServiceImpl implements AssignmentService {
     assignmentRepository.deleteById(id);
     return assignmentRepository.findById(id).isEmpty();
   }
-  
+
+  @Override
+  public List<Assignment> getMaterialAssignments(Integer materialId) {
+    List<Assignment> materialAssignment = assignmentRepository.findByMaterialId(materialId);
+    return materialAssignment;
+  }
 }
