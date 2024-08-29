@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "tb_m_material")
 public class Material {
@@ -21,7 +23,7 @@ public class Material {
   private Integer id;
 
   @Column
-  private String name;
+  private String title;
 
   @Column(columnDefinition = "TEXT")
   private String content;
@@ -31,6 +33,7 @@ public class Material {
   private Course course;
 
   @OneToMany(mappedBy = "material")
+  @JsonIgnore
   private List<Assignment> assignments;
   
 
@@ -38,9 +41,9 @@ public class Material {
 
   }  
 
-  public Material(Integer id, String name, String content) {
+  public Material(Integer id, String title, String content) {
     this.id = id;
-    this.name = name;
+    this.title = title;
     this.content = content;
   }
 
@@ -52,12 +55,12 @@ public class Material {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public String getTitle() {
+    return title;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   public String getContent() {
