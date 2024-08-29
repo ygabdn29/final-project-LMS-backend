@@ -36,19 +36,15 @@ public class Course {
   @JoinColumn(name = "mentor_id", referencedColumnName = "employee_id")
   private User mentor;
 
-  @OneToOne
-  @JoinColumn(name = "role_id", referencedColumnName = "id")
-  private Role role;
 
   public Course() {
   } 
 
-  public Course(Integer id, String title, String description, User mentor, Role role) {
+  public Course(Integer id, String title, String description, User mentor) {
     this.id = id;
     this.title = title;
     this.description = description;
     this.mentor = mentor;
-    this.role = role;
   }
 
   public Integer getId() {
@@ -89,14 +85,6 @@ public class Course {
 
   public void setMentor(User mentor) {
     this.mentor = mentor;
-  }
-
-  public Role getRole() {
-    return role;
-  }
-
-  public void setRole(Role role) {
-    this.role = role;
   }
   
 }
