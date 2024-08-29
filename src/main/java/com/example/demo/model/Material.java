@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "tb_m_material")
 public class Material {
@@ -31,6 +33,7 @@ public class Material {
   private Course course;
 
   @OneToMany(mappedBy = "material")
+  @JsonIgnore
   private List<Assignment> assignments;
   
 
