@@ -23,9 +23,6 @@ public class AssignmentSubmission {
   @Column
   private Float score;
 
-  @Column(name = "is_passed")
-  private Boolean isPassed;
-
   @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "employee_id")
   private User user;
@@ -42,7 +39,6 @@ public class AssignmentSubmission {
     this.id = id;
     this.answer = answer;
     this.score = score;
-    this.isPassed = isPassed;
     this.user = user;
     this.assignment = assignment;
   }
@@ -63,13 +59,6 @@ public class AssignmentSubmission {
     this.answer = answer;
   }  
 
-  public Boolean getIsPassed() {
-    return isPassed;
-  }
-
-  public void setIsPassed(Boolean isPassed) {
-    this.isPassed = isPassed;
-  }
 
   public User getUser() {
     return user;
