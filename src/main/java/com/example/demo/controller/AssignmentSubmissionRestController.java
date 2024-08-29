@@ -7,5 +7,4 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RestController
 @RequestMapping("api")
 public class AssignmentSubmissionRestController {
-
 }
