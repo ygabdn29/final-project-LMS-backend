@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -21,9 +22,6 @@ public class User {
   @Column
   private String password;
 
-  @Column(name = "is_admin")
-  private Boolean isAdmin;
-
   @Id
   @Column
   private Integer id;
@@ -37,15 +35,19 @@ public class User {
   @JsonIgnore
   private List<AssignmentSubmission> assignmentSubmissions;
 
+  @OneToOne
+  @JoinColumn(name = "role_id", referencedColumnName = "id")
+  private Role role;
+
   public User() {
   }
 
-  public User(String username, String password, Boolean isAdmin, Integer id, Employee employee) {
+  public User(Integer id, String username, String password, Employee employee, Role role) {
+    this.id = id;
     this.username = username;
     this.password = password;
-    this.isAdmin = isAdmin;
-    this.id = id;
     this.employee = employee;
+    this.role = role;
   }
 
   public String getUsername() {
@@ -62,14 +64,6 @@ public class User {
 
   public void setPassword(String password) {
     this.password = password;
-  }
-
-  public Boolean getIsAdmin() {
-    return isAdmin;
-  }
-
-  public void setIsAdmin(Boolean isAdmin) {
-    this.isAdmin = isAdmin;
   }
 
   public Integer getId() {
@@ -94,6 +88,14 @@ public class User {
 
   public void setAssignmentSubmissions(List<AssignmentSubmission> assignmentSubmissions) {
     this.assignmentSubmissions = assignmentSubmissions;
-  } 
+  }
+
+  public Role getRole() {
+    return role;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
+  }  
 
 }
