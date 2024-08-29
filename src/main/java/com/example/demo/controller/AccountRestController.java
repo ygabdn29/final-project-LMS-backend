@@ -46,17 +46,6 @@ public class AccountRestController {
   @Autowired
   private EmailService emailService;
 
-  @PostMapping("/login")
-  public ResponseEntity<Object> login(@RequestBody User userLogin){
-    User authenticatedUser = userService.authenticate(userLogin.getUsername(), userLogin.getPassword());
-
-    if(authenticatedUser == null){
-      return Utils.generateResponseEntity(HttpStatus.OK, "Login Failed!");
-    }
-
-    return Utils.generateResponseEntity(HttpStatus.OK, "Login Success!");
-  }
-
   @PostMapping("/register")
   public ResponseEntity<Object> register(@RequestBody RegistrationDTO registrationDTO) {
     Department department = departmentService.get(registrationDTO.getDepartment_id());
