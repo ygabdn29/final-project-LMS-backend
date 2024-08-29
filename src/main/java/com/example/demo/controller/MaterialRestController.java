@@ -8,14 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.model.Assignment;
 import com.example.demo.model.Course;
 import com.example.demo.model.Material;
-import com.example.demo.model.dto.AssignmentDTO;
-import com.example.demo.service.AssignmentService;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.MaterialService;
-
 import com.example.demo.handler.Utils;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,9 +29,6 @@ public class MaterialRestController {
 
   @Autowired
   private CourseService courseService;
-
-  @Autowired
-  private AssignmentService assignmentService;
 
   @GetMapping("/{id}/materials")
   public ResponseEntity<Object> get(@PathVariable Integer id) {
@@ -66,7 +59,7 @@ public class MaterialRestController {
 
       Material material = materialService.get(materialId);
       if (material == null || !material.getCourse().getId().equals(courseId)){
-        return Utils.generateResponseEntity(HttpStatus.NOT_FOUND, "Material not found or does not belong to the specified course");
+        return Utils.generateResponseEntity(HttpStatus.OK, "Material not found or does not belong to the specified course");
       }
 
       return Utils.generateResponseEntity(HttpStatus.OK, "Material Has Been Retrieved");
@@ -114,7 +107,7 @@ public class MaterialRestController {
         return Utils.generateResponseEntity(HttpStatus.OK, "Material does not belong to this course");
       }
 
-      selectMaterial.setName(material.getName());
+      selectMaterial.setTitle(material.getTitle());
       selectMaterial.setContent(material.getContent());
 
       materialService.save(selectMaterial);
@@ -139,38 +132,4 @@ public class MaterialRestController {
       return Utils.generateResponseEntity(HttpStatus.OK, "Failed to Delete Data Materials" + e.getMessage());
     }
   }
-
-  // Assignment
-  @GetMapping("/{courseId}/materials/{materialId}/assignments")
-  public ResponseEntity<Object> getCourseAssignment(@PathVariable Integer materialId){
-    try{
-      List<Assignment> assignments = assignmentService.getMaterialAssignments(materialId);
-      return Utils.generateResponseEntity(HttpStatus.OK, "Assignments for this Material retrieved.", assignments);
-    } catch(Exception e){
-      return Utils.generateResponseEntity(HttpStatus.OK, "Cannot retrieve assignments for this material");
-    }
-  }
-
-  @PostMapping("/{courseId}/materials/{materialId}/assignment/save")
-  public ResponseEntity<Object> addAssignment(@RequestBody AssignmentDTO assignmentDTO) {
-    try {
-      Material material = materialService.get(assignmentDTO.getMaterialId());
-      Assignment newAssignment = new Assignment(assignmentDTO.getId(), assignmentDTO.getName(), assignmentDTO.getContent(), assignmentDTO.getPassingScore(), assignmentDTO.getDueDate(), material);
-      assignmentService.save(newAssignment);
-      return Utils.generateResponseEntity(HttpStatus.OK, "Success");
-    } catch (Exception e) {
-      return Utils.generateResponseEntity(HttpStatus.OK, e.getMessage());
-    }
-  }
-  
-  @DeleteMapping("/{courseId}/materials/{materialId}/assignment/{assignmentId}")
-  public ResponseEntity<Object> deleteAssignment(@PathVariable Integer assignmentId){
-    try {
-      assignmentService.delete(assignmentId);
-      return Utils.generateResponseEntity(HttpStatus.OK, "Assignment Deleted Successfully");
-    } catch (Exception e) {
-      return Utils.generateResponseEntity(HttpStatus.OK, e.getMessage());
-    }
-  }
-  
 }

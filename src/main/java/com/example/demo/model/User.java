@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -21,9 +22,6 @@ public class User {
   @Column
   private String password;
 
-  @Column(name = "is_admin")
-  private Boolean isAdmin;
-
   @Id
   @Column
   private Integer id;
@@ -33,6 +31,10 @@ public class User {
   @JsonIgnore
   private Employee employee;
 
+  @OneToOne
+  @JoinColumn(name = "role_id", referencedColumnName = "id")
+  private Role role;
+
   @OneToMany(mappedBy = "user")
   @JsonIgnore
   private List<AssignmentSubmission> assignmentSubmissions;
@@ -40,13 +42,17 @@ public class User {
   public User() {
   }
 
-  public User(String username, String password, Boolean isAdmin, Integer id, Employee employee) {
+  public User(String username, String password, Integer id, Employee employee, Role role,
+      List<AssignmentSubmission> assignmentSubmissions) {
     this.username = username;
     this.password = password;
-    this.isAdmin = isAdmin;
     this.id = id;
     this.employee = employee;
+    this.role = role;
+    this.assignmentSubmissions = assignmentSubmissions;
   }
+
+
 
   public String getUsername() {
     return username;
@@ -62,14 +68,6 @@ public class User {
 
   public void setPassword(String password) {
     this.password = password;
-  }
-
-  public Boolean getIsAdmin() {
-    return isAdmin;
-  }
-
-  public void setIsAdmin(Boolean isAdmin) {
-    this.isAdmin = isAdmin;
   }
 
   public Integer getId() {
