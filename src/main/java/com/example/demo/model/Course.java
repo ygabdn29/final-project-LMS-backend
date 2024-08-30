@@ -85,5 +85,4 @@ public class Course {
   public void setMentor(User mentor) {
     this.mentor = mentor;
   }
-    
 }

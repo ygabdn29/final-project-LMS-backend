@@ -1,8 +1,5 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.handler.Utils;
 import com.example.demo.model.AssignmentSubmission;
 import com.example.demo.service.AssignmentSubmissionService;
@@ -33,5 +30,4 @@ public class AssignmentSubmissionRestController {
       return Utils.generateResponseEntity(HttpStatus.OK, "Failed to access score: " + e.getMessage());
     }
   }
-
 }
