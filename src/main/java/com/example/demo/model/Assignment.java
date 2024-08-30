@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -30,9 +32,10 @@ public class Assignment {
   private String content;
 
   @Column(name = "passing_score")
-  private Integer passingScore;
+  private Float passingScore;
 
   @Column(name = "due_date")
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate dueDate;
 
   @ManyToOne
@@ -47,7 +50,7 @@ public class Assignment {
   public Assignment() {
   }
 
-  public Assignment(Integer id, String name, String content, Integer passingScore, LocalDate dueDate, Material material) {
+  public Assignment(Integer id, String name, String content, Float passingScore, LocalDate dueDate, Material material) {
     this.id = id;
     this.name = name;
     this.content = content;
@@ -80,11 +83,11 @@ public class Assignment {
     this.content = content;
   }
 
-  public Integer getPassingScore() {
+  public Float getPassingScore() {
     return passingScore;
   }
 
-  public void setPassingScore(Integer passingScore) {
+  public void setPassingScore(Float passingScore) {
     this.passingScore = passingScore;
   }
 
