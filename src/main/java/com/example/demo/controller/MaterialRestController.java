@@ -127,5 +127,4 @@ public class MaterialRestController {
       return Utils.generateResponseEntity(HttpStatus.OK, "Failed to Delete Data Materials" + e.getMessage());
     }
   }
-  
 }

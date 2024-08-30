@@ -23,7 +23,6 @@ public class AssignmentSubmission {
   @Column
   private Float score;
 
-
   @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "employee_id")
   private User user;
