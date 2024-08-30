@@ -36,7 +36,6 @@ public class Course {
   @JoinColumn(name = "mentor_id", referencedColumnName = "employee_id")
   private User mentor;
 
-
   public Course() {
   } 
 

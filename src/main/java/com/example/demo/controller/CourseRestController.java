@@ -86,5 +86,4 @@ public class CourseRestController {
       return Utils.generateResponseEntity(HttpStatus.OK, "Failed to delete course: " + e.getMessage());
     }
   }
-
 }
