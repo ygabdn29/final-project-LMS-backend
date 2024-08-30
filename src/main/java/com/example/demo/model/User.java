@@ -37,9 +37,6 @@ public class User {
   @JsonIgnore
   private Employee employee;
 
-  @OneToOne
-  @JoinColumn(name = "role_id", referencedColumnName = "id")
-  private Role role;
 
   @OneToMany(mappedBy = "user")
   @JsonIgnore
