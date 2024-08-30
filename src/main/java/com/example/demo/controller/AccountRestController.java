@@ -37,12 +37,6 @@ import java.util.UUID;
 @RequestMapping("api/account")
 public class AccountRestController {
   @Autowired
-  private PasswordEncoder passwordEncoder;
-
-  @Autowired
-  private EmployeeService employeeService;
-  
-  @Autowired
   private DepartmentService departmentService;
 
   @Autowired

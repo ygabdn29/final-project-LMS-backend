@@ -45,6 +45,10 @@ public class User {
   @JsonIgnore
   private List<AssignmentSubmission> assignmentSubmissions;
 
+  @OneToOne
+  @JoinColumn(name = "role_id", referencedColumnName = "id")
+  private Role role;
+
   public User() {
   }
 
@@ -56,6 +60,10 @@ public class User {
     this.role = role;
     this.isVerified = isVerified;
   }
+
+  public void setRole(Role role) {
+    this.role = role;
+  } 
 
   public String getUsername() {
     return username;
@@ -120,6 +128,4 @@ public class User {
   public void setIsVerified(Boolean isVerified) {
     this.isVerified = isVerified;
   } 
-
-  
 }

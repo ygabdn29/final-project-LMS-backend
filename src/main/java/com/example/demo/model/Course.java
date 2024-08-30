@@ -39,10 +39,11 @@ public class Course {
   public Course() {
   } 
 
-  public Course(Integer id, String title, String description) {
+  public Course(Integer id, String title, String description, User mentor) {
     this.id = id;
     this.title = title;
     this.description = description;
+    this.mentor = mentor;
   }
 
   public Integer getId() {
