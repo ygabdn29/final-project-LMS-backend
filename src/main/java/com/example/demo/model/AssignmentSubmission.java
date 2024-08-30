@@ -59,7 +59,6 @@ public class AssignmentSubmission {
     this.answer = answer;
   }  
 
-
   public User getUser() {
     return user;
   }

@@ -22,6 +22,12 @@ public class User {
   @Column
   private String password;
 
+  @Column(name ="is_verified")
+  private Boolean isVerified;
+
+  @Column(name="guid")
+  private String guid;
+
   @Id
   @Column
   private Integer id;
@@ -39,20 +45,21 @@ public class User {
   @JsonIgnore
   private List<AssignmentSubmission> assignmentSubmissions;
 
+  @OneToOne
+  @JoinColumn(name = "role_id", referencedColumnName = "id")
+  private Role role;
+
   public User() {
   }
 
-  public User(String username, String password, Integer id, Employee employee, Role role,
-      List<AssignmentSubmission> assignmentSubmissions) {
+  public User(String username, String password, Integer id, Employee employee, Role role, Boolean isVerified) {
     this.username = username;
     this.password = password;
     this.id = id;
     this.employee = employee;
     this.role = role;
-    this.assignmentSubmissions = assignmentSubmissions;
+    this.isVerified = isVerified;
   }
-
-
 
   public String getUsername() {
     return username;
@@ -92,6 +99,29 @@ public class User {
 
   public void setAssignmentSubmissions(List<AssignmentSubmission> assignmentSubmissions) {
     this.assignmentSubmissions = assignmentSubmissions;
-  } 
+  }
 
+  public String getGuid() {
+    return guid;
+  }
+
+  public void setGuid(String guid) {
+    this.guid = guid;
+  }
+
+  public Role getRole() {
+    return role;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
+  }
+
+  public Boolean getIsVerified() {
+    return isVerified;
+  }
+
+  public void setIsVerified(Boolean isVerified) {
+    this.isVerified = isVerified;
+  } 
 }

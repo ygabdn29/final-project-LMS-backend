@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.handler.Utils;
 import com.example.demo.model.Course;
+import com.example.demo.model.User;
+import com.example.demo.model.dto.NewCourseDTO;
 import com.example.demo.service.CourseService;
-
+import com.example.demo.service.UserService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,13 +22,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class CourseRestController {
   @Autowired
   private CourseService courseService;
-  
 
-
-  @GetMapping
-  public ResponseEntity<Object> accessCourse(@RequestHeader Integer id) {
+  @PostMapping("create")
+  public ResponseEntity<Object> newCourse(@RequestBody NewCourseDTO newCourseDTO) {
     try {
-      Course course = courseService.get(id);
+      User mentor = userService.get(newCourseDTO.getMentorId());
+      if (mentor == null) {
+        return Utils.generateResponseEntity(HttpStatus.OK, "User not found");
+      }
+      Course course = new Course(null, newCourseDTO.getTitle(), newCourseDTO.getDescription(), mentor);
+      courseService.save(course);
+      return Utils.generateResponseEntity(HttpStatus.OK, "Course successfully created");
+    } catch (Exception e) {
+      return Utils.generateResponseEntity(HttpStatus.OK, "Failed to create course: " + e.getMessage());
+    }
+  }
+  
+  @GetMapping("{courseId}")
+  public ResponseEntity<Object> accessCourse(@PathVariable Integer courseId) {
+    try {
+      Course course = courseService.get(courseId);
       if (course == null) {
         return Utils.generateResponseEntity(HttpStatus.OK, "Course not found");
       }
@@ -36,6 +51,24 @@ public class CourseRestController {
     }
   }
 
+  @PostMapping("update")
+  public ResponseEntity<Object> updateCourse(@RequestBody NewCourseDTO newCourseDTO) {
+    try {
+      User newMentor = userService.get(newCourseDTO.getMentorId());
+      Course course = courseService.get(newCourseDTO.getId());
+      if (course == null) {
+        return Utils.generateResponseEntity(HttpStatus.OK, "Course not found");
+      }
+      if (newMentor == null) {
+        return Utils.generateResponseEntity(HttpStatus.OK, "User not found");
+      }
+      Course updatedCourse = new Course(null, newCourseDTO.getTitle(), newCourseDTO.getDescription(), newMentor);
+      courseService.save(updatedCourse);
+      return Utils.generateResponseEntity(HttpStatus.OK, "Course updated successfully");
+    } catch (Exception e) {
+      return Utils.generateResponseEntity(HttpStatus.OK, "Failed to update course: " + e.getMessage());
+    }
+  }
 
   @DeleteMapping("delete")
   public ResponseEntity<Object> deleteCourse(@RequestHeader Integer id) {
