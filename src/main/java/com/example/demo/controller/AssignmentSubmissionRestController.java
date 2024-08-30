@@ -37,7 +37,7 @@ public class AssignmentSubmissionRestController {
   @Autowired
   private AssignmentService assignmentService;
 
-
+  
   @PostMapping("/{courseId}/material/{materialId}/assignment/{assignmentId}/submit")
   public ResponseEntity<Object> submitAssignment(
       @PathVariable Integer courseId,

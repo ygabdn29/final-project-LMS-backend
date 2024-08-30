@@ -61,10 +61,6 @@ public class User {
     this.isVerified = isVerified;
   }
 
-  public void setRole(Role role) {
-    this.role = role;
-  } 
-
   public String getUsername() {
     return username;
   }

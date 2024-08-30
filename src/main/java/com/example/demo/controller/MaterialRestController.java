@@ -12,7 +12,6 @@ import com.example.demo.model.Course;
 import com.example.demo.model.Material;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.MaterialService;
-
 import com.example.demo.handler.Utils;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +29,6 @@ public class MaterialRestController {
 
   @Autowired
   private CourseService courseService;
-
 
   @GetMapping("/{id}/materials")
   public ResponseEntity<Object> get(@PathVariable Integer id) {
@@ -59,7 +57,7 @@ public class MaterialRestController {
 
       Material material = materialService.get(materialId);
       if (material == null || !material.getCourse().getId().equals(courseId)){
-        return Utils.generateResponseEntity(HttpStatus.NOT_FOUND, "Material not found or does not belong to the specified course");
+        return Utils.generateResponseEntity(HttpStatus.OK, "Material not found or does not belong to the specified course");
       }
 
       return Utils.generateResponseEntity(HttpStatus.OK, "Material Has Been Retrieved");

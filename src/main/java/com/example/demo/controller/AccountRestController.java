@@ -32,7 +32,6 @@ import com.example.demo.service.UserService;
 import java.util.UUID;
 
 
-
 @RestController
 @RequestMapping("api/account")
 public class AccountRestController {
