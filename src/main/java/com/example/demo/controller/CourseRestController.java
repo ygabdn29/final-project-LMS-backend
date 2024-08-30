@@ -68,7 +68,7 @@ public class CourseRestController {
       if (newMentor == null) {
         return Utils.generateResponseEntity(HttpStatus.OK, "User not found");
       }
-      Course updatedCourse = new Course(null, newCourseDTO.getTitle(), newCourseDTO.getDescription(), newMentor);
+      Course updatedCourse = new Course(newCourseDTO.getId(), newCourseDTO.getTitle(), newCourseDTO.getDescription(), newMentor);
       courseService.save(updatedCourse);
       return Utils.generateResponseEntity(HttpStatus.OK, "Course updated successfully");
     } catch (Exception e) {
