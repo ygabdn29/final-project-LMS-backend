@@ -41,5 +41,4 @@ public class AssignmentServiceImpl implements AssignmentService {
     List<Assignment> materialAssignment = assignmentRepository.findByMaterialId(materialId);
     return materialAssignment;
   }
-  
 }

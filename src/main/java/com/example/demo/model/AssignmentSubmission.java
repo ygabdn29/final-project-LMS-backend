@@ -20,13 +20,8 @@ public class AssignmentSubmission {
   @Column(columnDefinition = "TEXT")
   private String answer;
 
-  //attachment
-
   @Column
-  private Integer grade;
-
-  @Column(name = "is_passed")
-  private Boolean isPassed;
+  private Float score;
 
   @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "employee_id")
@@ -39,12 +34,11 @@ public class AssignmentSubmission {
   public AssignmentSubmission() {
   }
 
-  public AssignmentSubmission(Integer id, String answer, Integer grade, Boolean isPassed, User user,
+  public AssignmentSubmission(Integer id, String answer, Float score, User user,
       Assignment assignment) {
     this.id = id;
     this.answer = answer;
-    this.grade = grade;
-    this.isPassed = isPassed;
+    this.score = score;
     this.user = user;
     this.assignment = assignment;
   }
@@ -63,23 +57,7 @@ public class AssignmentSubmission {
 
   public void setAnswer(String answer) {
     this.answer = answer;
-  }
-
-  public Integer getGrade() {
-    return grade;
-  }
-
-  public void setGrade(Integer grade) {
-    this.grade = grade;
-  }
-
-  public Boolean getIsPassed() {
-    return isPassed;
-  }
-
-  public void setIsPassed(Boolean isPassed) {
-    this.isPassed = isPassed;
-  }
+  }  
 
   public User getUser() {
     return user;
@@ -95,6 +73,14 @@ public class AssignmentSubmission {
 
   public void setAssignment(Assignment assignment) {
     this.assignment = assignment;
+  }
+
+  public Float getScore() {
+    return score;
+  }
+
+  public void setScore(Float score) {
+    this.score = score;
   }
 
 }
