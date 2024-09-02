@@ -37,9 +37,6 @@ public class User {
   @JsonIgnore
   private Employee employee;
 
-  @OneToOne
-  @JoinColumn(name = "role_id", referencedColumnName = "id")
-  private Role role;
 
   @OneToMany(mappedBy = "user")
   @JsonIgnore
@@ -60,10 +57,6 @@ public class User {
     this.role = role;
     this.isVerified = isVerified;
   }
-
-  public void setRole(Role role) {
-    this.role = role;
-  } 
 
   public String getUsername() {
     return username;

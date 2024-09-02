@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.handler.Utils;
+import com.example.demo.model.Assignment;
 import com.example.demo.model.AssignmentSubmission;
 import com.example.demo.model.Course;
 import com.example.demo.model.Material;
@@ -16,9 +17,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -37,7 +42,10 @@ public class AssignmentSubmissionRestController {
   @Autowired
   private AssignmentService assignmentService;
 
+  @Autowired
+  private MaterialService materialService;
 
+  
   @PostMapping("/{courseId}/material/{materialId}/assignment/{assignmentId}/submit")
   public ResponseEntity<Object> submitAssignment(
       @PathVariable Integer courseId,
@@ -106,21 +114,24 @@ public class AssignmentSubmissionRestController {
     } catch (Exception e) {
       return Utils.generateResponseEntity(HttpStatus.OK, "Failed to access score: " + e.getMessage());
     }
+  }
   
   @PostMapping("/{courseId}/material/{materialId}/assignment/{assignmentId}/{submissionId}/grading")
   public ResponseEntity<Object> gradeSubmission(@PathVariable Integer submissionId, @RequestHeader Float score) {
      AssignmentSubmission assignmentSubmission = assignmentSubmissionService.get(submissionId);
-      if (assignmentSubmission == null) {
-        return Utils.generateResponseEntity(HttpStatus.OK, "Submission not found");
-      }    
-      if ((score > 100) || (score < 0)) {
-        return Utils.generateResponseEntity(HttpStatus.OK, "Can't input score below 0 and above 100");
-      }
-      assignmentSubmission.setScore(score);
-      assignmentSubmissionService.save(assignmentSubmission);
-      return Utils.generateResponseEntity(HttpStatus.OK, "Submission successfully graded");
-    } catch (Exception e) {
+      try{
+        if (assignmentSubmission == null) {
+          return Utils.generateResponseEntity(HttpStatus.OK, "Submission not found");
+        }    
+        if ((score > 100) || (score < 0)) {
+          return Utils.generateResponseEntity(HttpStatus.OK, "Can't input score below 0 and above 100");
+        }
+        assignmentSubmission.setScore(score);
+        assignmentSubmissionService.save(assignmentSubmission);
+        return Utils.generateResponseEntity(HttpStatus.OK, "Submission successfully graded");
+      } catch (Exception e) {
       return Utils.generateResponseEntity(HttpStatus.OK, "Failed to grade submission: " + e.getMessage());
     }
   }
 }
+
