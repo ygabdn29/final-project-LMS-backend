@@ -16,12 +16,18 @@ import com.example.demo.service.UserService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("api/course")
 public class CourseRestController {
   @Autowired
   private CourseService courseService;
+
+  @Autowired
+  private UserService userService;
 
   @PostMapping("create")
   public ResponseEntity<Object> newCourse(@RequestBody NewCourseDTO newCourseDTO) {
@@ -62,7 +68,7 @@ public class CourseRestController {
       if (newMentor == null) {
         return Utils.generateResponseEntity(HttpStatus.OK, "User not found");
       }
-      Course updatedCourse = new Course(null, newCourseDTO.getTitle(), newCourseDTO.getDescription(), newMentor);
+      Course updatedCourse = new Course(newCourseDTO.getId(), newCourseDTO.getTitle(), newCourseDTO.getDescription(), newMentor);
       courseService.save(updatedCourse);
       return Utils.generateResponseEntity(HttpStatus.OK, "Course updated successfully");
     } catch (Exception e) {

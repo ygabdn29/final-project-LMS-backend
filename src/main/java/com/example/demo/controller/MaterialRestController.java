@@ -8,8 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.model.Assignment;
 import com.example.demo.model.Course;
 import com.example.demo.model.Material;
+import com.example.demo.model.dto.AssignmentDTO;
+import com.example.demo.service.AssignmentService;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.MaterialService;
 import com.example.demo.handler.Utils;
@@ -29,6 +32,9 @@ public class MaterialRestController {
 
   @Autowired
   private CourseService courseService;
+
+  @Autowired
+  private AssignmentService assignmentService;
 
   @GetMapping("/{id}/materials")
   public ResponseEntity<Object> get(@PathVariable Integer id) {
@@ -123,6 +129,62 @@ public class MaterialRestController {
       return Utils.generateResponseEntity(HttpStatus.OK, "Material Has Been Deleted");
     } catch (Exception e) {
       return Utils.generateResponseEntity(HttpStatus.OK, "Failed to Delete Data Materials" + e.getMessage());
+    }
+  }
+
+  // Assignment
+  @GetMapping("/{courseId}/material/{materialId}/assignment")
+  public ResponseEntity<Object> getMaterialAssignment(@PathVariable Integer materialId, @PathVariable Integer courseId){
+    Course course = courseService.get(courseId);
+    Material material = materialService.get(materialId);
+
+    if(course == null || material == null){
+      return Utils.generateResponseEntity(HttpStatus.OK, "Invalid course or material");
+    }
+
+    try {
+      List<Assignment> assignments = assignmentService.getMaterialAssignments(materialId);
+      return Utils.generateResponseEntity(HttpStatus.OK, "Assignments for this course retrieved!", assignments);
+    } catch (Exception e) {
+      
+      return Utils.generateResponseEntity(HttpStatus.OK, e.getMessage());
+    }
+  }
+
+  @PostMapping("/{courseId}/material/{materialId}/assignment/new")
+  public ResponseEntity<Object> saveNewAssignment(@RequestBody AssignmentDTO assignmentDTO, @PathVariable Integer materialId, @PathVariable Integer courseId){
+    Course course = courseService.get(courseId);
+    Material material = materialService.get(materialId);
+
+    if(course == null || material == null){
+      return Utils.generateResponseEntity(HttpStatus.OK, "Invalid course or material");
+    }
+
+    try {
+      Assignment assignment = new Assignment(assignmentDTO.getId(), assignmentDTO.getName(), assignmentDTO.getContent(), assignmentDTO.getPassingScore(), assignmentDTO.getDueDate(), material);
+
+      assignmentService.save(assignment);
+      return Utils.generateResponseEntity(HttpStatus.OK, "Assignment Saved");
+      
+    } catch (Exception e) {
+      return Utils.generateResponseEntity(HttpStatus.OK, e.getMessage());
+    }
+  }
+
+  @DeleteMapping("/{courseId}/material/{materialId}/assignment/{assignmentId}/delete")
+  public ResponseEntity<Object> deleteAssignment(@PathVariable Integer materialId, @PathVariable Integer courseId, @PathVariable Integer assignmentId){
+    Course course = courseService.get(courseId);
+    Material material = materialService.get(materialId);
+
+    if(course == null || material == null){
+      return Utils.generateResponseEntity(HttpStatus.OK, "Invalid course or material");
+    }
+
+    try {
+      assignmentService.delete(assignmentId);
+      return Utils.generateResponseEntity(HttpStatus.OK, "Assignment Deleted");
+    } catch (Exception e) {
+      return Utils.generateResponseEntity(HttpStatus.OK, e.getMessage());
     }
   }
 }

@@ -7,12 +7,12 @@ public class AssignmentDTO {
   private String content;
   private LocalDate dueDate;
   private String name;
-  private Integer passingScore;
+  private Float passingScore;
   private Integer materialId;
 
   public AssignmentDTO(){}
 
-  public AssignmentDTO(Integer id, String content, LocalDate dueDate, String name, Integer passingScore,
+  public AssignmentDTO(Integer id, String content, LocalDate dueDate, String name, Float passingScore,
       Integer materialId) {
     this.id = id;
     this.content = content;
@@ -54,11 +54,11 @@ public class AssignmentDTO {
     this.name = name;
   }
 
-  public Integer getPassingScore() {
+  public Float getPassingScore() {
     return passingScore;
   }
 
-  public void setPassingScore(Integer passingScore) {
+  public void setPassingScore(Float passingScore) {
     this.passingScore = passingScore;
   }
 
@@ -70,7 +70,4 @@ public class AssignmentDTO {
     this.materialId = materialId;
   }
 
-  
-
-  
 }

@@ -46,6 +46,12 @@ public class AccountRestController {
 
   @Autowired
   private EmailService emailService;
+  
+  @Autowired
+  private EmployeeService employeeService;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @PostMapping("/login")
   public ResponseEntity<Object> login(@RequestBody User userLogin){
@@ -73,6 +79,8 @@ public class AccountRestController {
     return Utils.generateResponseEntity(HttpStatus.OK, "Login Success!");
     } catch(Exception e){
       return Utils.generateResponseEntity(HttpStatus.OK, "Credentials Doesn't Match Any Records!");
+    }
+  }
 
 
 
@@ -86,7 +94,7 @@ public class AccountRestController {
       String username = registrationDTO.getFirstName() + "." + registrationDTO.getLastName();
       Role role = roleService.findByName("Mentee");
       String guid = UUID.randomUUID().toString();
-      User user = new User(username, passwordEncoder.encode(registrationDTO.getPassword()) , null, employee, role);
+      User user = new User(username, passwordEncoder.encode(registrationDTO.getPassword()) , null, employee, role, false);
       user.setGuid(guid);
       userService.save(user);
 
