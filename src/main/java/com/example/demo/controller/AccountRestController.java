@@ -30,6 +30,10 @@ import com.example.demo.service.EmployeeService;
 import com.example.demo.service.RoleService;
 import com.example.demo.service.UserService;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 
 @RestController
@@ -115,4 +119,17 @@ public class AccountRestController {
     authorities.add(new SimpleGrantedAuthority(role));
     return authorities;
   }
+
+  @GetMapping("/mentors")
+  public ResponseEntity<Object> getMentors() {
+      try {
+        List<User> mentors = userService.get().stream()
+          .filter(user -> user.getRole().getName().equals("Mentor")) //filter only user mentor
+          .collect(Collectors.toList());
+        return Utils.generateResponseEntity(HttpStatus.OK, "Mentors accessed successfully", mentors);
+    } catch (Exception e) {
+        return Utils.generateResponseEntity(HttpStatus.OK, "Failed to access mentors: " + e.getMessage());
+    }
+  }
+  
 }
