@@ -48,5 +48,15 @@ public class UserServiceImpl implements UserService{
     }
     return null;
   }
+
+  @Override
+  public User verifyUser(String guidString) {
+    User user = userRepository.findByGuid(guidString);
+    if (user != null) {
+      return user;
+    }
+
+    return null;
+  }
   
 }

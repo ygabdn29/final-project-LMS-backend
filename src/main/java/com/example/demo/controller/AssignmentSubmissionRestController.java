@@ -46,49 +46,49 @@ public class AssignmentSubmissionRestController {
   private MaterialService materialService;
 
   
-  @PostMapping("/{courseId}/material/{materialId}/assignment/{assignmentId}/submit")
-  public ResponseEntity<Object> submitAssignment(
-      @PathVariable Integer courseId,
-      @PathVariable Integer materialId,
-      @PathVariable Integer assignmentId,
-      @RequestBody Map<String, String> request,
-      @RequestHeader Integer userId) {
-    try {
-      Course course = courseService.get(courseId);
-      if (course == null) {
-        return Utils.generateResponseEntity(HttpStatus.OK, "Course not found");
-      }
+  // @PostMapping("/{courseId}/material/{materialId}/assignment/{assignmentId}/submit")
+  // public ResponseEntity<Object> submitAssignment(
+  //     @PathVariable Integer courseId,
+  //     @PathVariable Integer materialId,
+  //     @PathVariable Integer assignmentId,
+  //     @RequestBody Map<String, String> request,
+  //     @RequestHeader Integer userId) {
+  //   try {
+  //     Course course = courseService.get(courseId);
+  //     if (course == null) {
+  //       return Utils.generateResponseEntity(HttpStatus.OK, "Course not found");
+  //     }
 
-      Material material = materialService.get(materialId);
-      if (material == null || !material.getCourse().getId().equals(courseId)) {
-        return Utils.generateResponseEntity(HttpStatus.OK,
-            "Material not found or does not belong to the specified course");
-      }
+  //     Material material = materialService.get(materialId);
+  //     if (material == null || !material.getCourse().getId().equals(courseId)) {
+  //       return Utils.generateResponseEntity(HttpStatus.OK,
+  //           "Material not found or does not belong to the specified course");
+  //     }
 
-      Assignment assignment = assignmentService.get(assignmentId);
-      if (assignment == null || !assignment.getMaterial().getId().equals(materialId)) {
-        return Utils.generateResponseEntity(HttpStatus.OK,
-            "Assignment not found or does not belong to the specified material");
-      }
+  //     Assignment assignment = assignmentService.get(assignmentId);
+  //     if (assignment == null || !assignment.getMaterial().getId().equals(materialId)) {
+  //       return Utils.generateResponseEntity(HttpStatus.OK,
+  //           "Assignment not found or does not belong to the specified material");
+  //     }
 
-      User user = userService.get(userId);
-      if (user == null) {
-        return Utils.generateResponseEntity(HttpStatus.OK, "User not found");
-      }
+  //     User user = userService.get(userId);
+  //     if (user == null) {
+  //       return Utils.generateResponseEntity(HttpStatus.OK, "User not found");
+  //     }
 
-      String answer = request.get("answer");
-      AssignmentSubmission submission = new AssignmentSubmission();
-      submission.setAssignment(assignment);
-      submission.setAnswer(answer);
-      submission.setUser(user);
+  //     String answer = request.get("answer");
+  //     AssignmentSubmission submission = new AssignmentSubmission();
+  //     submission.setAssignment(assignment);
+  //     submission.setAnswer(answer);
+  //     submission.setUser(user);
 
-      assignmentSubmissionService.save(submission);
+  //     assignmentSubmissionService.save(submission);
 
-      return Utils.generateResponseEntity(HttpStatus.OK, "Assignment submitted successfully");
-    } catch (Exception e) {
-      return Utils.generateResponseEntity(HttpStatus.OK, "Failed to submit assignment: " + e.getMessage());
-    }
-  }
+  //     return Utils.generateResponseEntity(HttpStatus.OK, "Assignment submitted successfully");
+  //   } catch (Exception e) {
+  //     return Utils.generateResponseEntity(HttpStatus.OK, "Failed to submit assignment: " + e.getMessage());
+  //   }
+  // }
 
   @GetMapping("/{courseId}/material/{materialId}/assignment/{assignmentId}/{submissionId}")
   public ResponseEntity<Object> accessSubmission(@PathVariable Integer submissionId) {

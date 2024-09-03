@@ -27,9 +27,6 @@ public class Employee {
   @Column(name ="first_name")
   private String firstName;
 
-  @Column(name ="middle_name")
-  private String middleName;
-
   @Column(name ="last_name")
   private String lastName;
 
@@ -38,7 +35,7 @@ public class Employee {
   private LocalDate dob;
 
   @Column
-  private Integer gender;
+  private Boolean gender;
 
   @Column(columnDefinition = "TEXT")
   private String address;
@@ -61,11 +58,10 @@ public class Employee {
   public Employee() {
   }
 
-  public Employee(Integer id, String firstName, String middleName, String lastName, LocalDate dob, Integer gender,
+  public Employee(Integer id, String firstName, String lastName, LocalDate dob, Boolean gender,
       String address, String phone, String email, Department department) {
     this.id = id;
     this.firstName = firstName;
-    this.middleName = middleName;
     this.lastName = lastName;
     this.dob = dob;
     this.gender = gender;
@@ -95,16 +91,6 @@ public class Employee {
   }
 
 
-  public String getMiddleName() {
-    return middleName;
-  }
-
-
-  public void setMiddleName(String middleName) {
-    this.middleName = middleName;
-  }
-
-
   public String getLastName() {
     return lastName;
   }
@@ -114,12 +100,12 @@ public class Employee {
     this.lastName = lastName;
   } 
 
-  public Integer getGender() {
+  public Boolean getGender() {
     return gender;
   }
 
 
-  public void setGender(Integer gender) {
+  public void setGender(Boolean gender) {
     this.gender = gender;
   }
 
