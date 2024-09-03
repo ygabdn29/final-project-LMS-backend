@@ -12,6 +12,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,8 +84,6 @@ public class AccountRestController {
     }
   }
 
-
-
   @PostMapping("/register")
   public ResponseEntity<Object> register(@RequestBody RegistrationDTO registrationDTO) {
     Department department = departmentService.get(registrationDTO.getDepartment_id());
@@ -114,5 +114,24 @@ public class AccountRestController {
     final List<SimpleGrantedAuthority> authorities = new LinkedList<>();
     authorities.add(new SimpleGrantedAuthority(role));
     return authorities;
+  }
+
+  @GetMapping("/verify/{guid}")
+  public ResponseEntity<Object> verifyEmail(@PathVariable String guid) {
+    // nanti ini yang diproses sama halaman react yang diakses dari link post register
+    User user = userService.verifyUser(guid);
+    if (user != null) {
+      user.setIsVerified(true);
+      user.setGuid(null);
+      userService.save(user);
+      return Utils.generateResponseEntity(HttpStatus.OK, "Verification Account successfully");
+    }
+    return Utils.generateResponseEntity(HttpStatus.BAD_REQUEST, "Verification Failed");
+  }
+  
+  @GetMapping("/get-departments")
+  public ResponseEntity<Object> getDepartments(){
+    List<Department> departments = departmentService.get();
+    return Utils.generateResponseEntity(HttpStatus.OK, "Departments Retrieved", departments);
   }
 }
