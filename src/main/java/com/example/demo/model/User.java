@@ -43,11 +43,7 @@ public class User {
 
   @OneToMany(mappedBy = "user")
   @JsonIgnore
-  private List<AssignmentSubmission> assignmentSubmissions;
-
-  @OneToOne
-  @JoinColumn(name = "role_id", referencedColumnName = "id")
-  private Role role;
+  private List<CourseTransaction> courseTransactions;
 
   public User() {
   }
@@ -93,14 +89,6 @@ public class User {
     this.employee = employee;
   }
 
-  public List<AssignmentSubmission> getAssignmentSubmissions() {
-    return assignmentSubmissions;
-  }
-
-  public void setAssignmentSubmissions(List<AssignmentSubmission> assignmentSubmissions) {
-    this.assignmentSubmissions = assignmentSubmissions;
-  }
-
   public String getGuid() {
     return guid;
   }
@@ -123,5 +111,14 @@ public class User {
 
   public void setIsVerified(Boolean isVerified) {
     this.isVerified = isVerified;
+  }
+
+  public List<CourseTransaction> getCourseTransactions() {
+    return courseTransactions;
+  }
+
+  public void setCourseTransactions(List<CourseTransaction> courseTransactions) {
+    this.courseTransactions = courseTransactions;
   } 
+
 }
