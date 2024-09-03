@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,6 +85,16 @@ public class CourseRestController {
       return Utils.generateResponseEntity(HttpStatus.OK, "Course deleted successfully");
     } catch (Exception e) {
       return Utils.generateResponseEntity(HttpStatus.OK, "Failed to delete course: " + e.getMessage());
+    }
+  }
+
+  @GetMapping
+  public ResponseEntity<Object> accessAllCourse() {
+    try {
+      List<Course> courses = courseService.get();
+      return Utils.generateResponseEntity(HttpStatus.OK, "Courses accessed successfully", courses);
+    } catch (Exception e) {
+      return Utils.generateResponseEntity(HttpStatus.OK, "Failed to access course: " + e.getMessage());
     }
   }
 }
