@@ -88,7 +88,7 @@ public class AccountRestController {
   public ResponseEntity<Object> register(@RequestBody RegistrationDTO registrationDTO) {
     Department department = departmentService.get(registrationDTO.getDepartment_id());
     try {
-      Employee employee = new Employee(null, registrationDTO.getFirstName(), registrationDTO.getMiddleName(), registrationDTO.getLastName(), registrationDTO.getBirthDate(), registrationDTO.getGender(), registrationDTO.getAddress(), registrationDTO.getPhone(), registrationDTO.getEmail(), department);
+      Employee employee = new Employee(null, registrationDTO.getFirstName(), registrationDTO.getLastName(), registrationDTO.getBirthDate(), registrationDTO.getGender(), registrationDTO.getAddress(), registrationDTO.getPhone(), registrationDTO.getEmail(), department);
       employeeService.save(employee);
 
       String username = registrationDTO.getFirstName() + "." + registrationDTO.getLastName();

@@ -4,11 +4,10 @@ import java.time.LocalDate;
 
 public class RegistrationDTO {
   private String firstName;
-  private String middleName;
   private String lastName;
   private String email;
   private String address;
-  private Integer gender;
+  private Boolean gender;
   private String phone;
   private String password;
   private Integer department_id;
@@ -16,10 +15,9 @@ public class RegistrationDTO {
 
   public RegistrationDTO(){}
 
-  public RegistrationDTO(String firstName, String middleName, String lastName, String email, String address,
-      Integer gender, String phone, String password, Integer department_id, LocalDate birthDate) {
+  public RegistrationDTO(String firstName, String lastName, String email, String address,
+      Boolean gender, String phone, String password, Integer department_id, LocalDate birthDate) {
     this.firstName = firstName;
-    this.middleName = middleName;
     this.lastName = lastName;
     this.email = email;
     this.address = address;
@@ -36,14 +34,6 @@ public class RegistrationDTO {
 
   public void setFirstName(String firstName) {
     this.firstName = firstName;
-  }
-
-  public String getMiddleName() {
-    return middleName;
-  }
-
-  public void setMiddleName(String middleName) {
-    this.middleName = middleName;
   }
 
   public String getLastName() {
@@ -70,11 +60,11 @@ public class RegistrationDTO {
     this.address = address;
   }
 
-  public Integer getGender() {
+  public Boolean getGender() {
     return gender;
   }
 
-  public void setGender(Integer gender) {
+  public void setGender(Boolean gender) {
     this.gender = gender;
   }
 
