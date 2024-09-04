@@ -23,7 +23,7 @@ public class CourseTransaction {
   private Integer id;
 
   @ManyToOne
-  @JoinColumn(name = "user_id", referencedColumnName = "employee_id")
+  @JoinColumn(name = "user_id", referencedColumnName = "employee_id", unique = false)
   private User user;
 
   // jadionetomany
