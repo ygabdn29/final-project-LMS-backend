@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.handler.Utils;
 import com.example.demo.model.Course;
+import com.example.demo.model.CourseTransaction;
 import com.example.demo.model.User;
+import com.example.demo.model.dto.EnrollCourseDTO;
 import com.example.demo.model.dto.NewCourseDTO;
 import com.example.demo.service.CourseService;
+import com.example.demo.service.CourseTransactionService;
 import com.example.demo.service.UserService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +33,9 @@ public class CourseRestController {
 
   @Autowired
   private UserService userService;
+
+  @Autowired 
+  private CourseTransactionService courseTransactionService;
 
   @PostMapping("create")
   public ResponseEntity<Object> newCourse(@RequestBody NewCourseDTO newCourseDTO) {
@@ -95,6 +101,21 @@ public class CourseRestController {
       return Utils.generateResponseEntity(HttpStatus.OK, "Courses accessed successfully", courses);
     } catch (Exception e) {
       return Utils.generateResponseEntity(HttpStatus.OK, "Failed to access course: " + e.getMessage());
+    }
+  }
+
+  @PostMapping("/enroll")
+  public ResponseEntity<Object> enrollCourse(@RequestBody EnrollCourseDTO enrollCourseDTO){
+    Course course = courseService.get(enrollCourseDTO.getCourseId());
+    User user = userService.get(enrollCourseDTO.getUserId());
+    if(course == null) return Utils.generateResponseEntity(HttpStatus.OK, "Invalid Course");
+    try {
+      CourseTransaction courseTransaction = new CourseTransaction(null, user, course);
+      courseTransactionService.save(courseTransaction);
+
+      return Utils.generateResponseEntity(HttpStatus.OK, "Success enrolling course");
+    } catch (Exception e) {
+      return Utils.generateResponseEntity(HttpStatus.OK, "Error when enrolling course");
     }
   }
 }
