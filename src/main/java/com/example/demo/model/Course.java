@@ -32,6 +32,10 @@ public class Course {
   @JsonIgnore
   private List<Material> materials;
 
+  @OneToMany(mappedBy = "course")
+  @JsonIgnore
+  private List<CourseTransaction> courseTransactions;
+
   @OneToOne
   @JoinColumn(name = "mentor_id", referencedColumnName = "employee_id")
   private User mentor;
@@ -39,10 +43,11 @@ public class Course {
   public Course() {
   } 
 
-  public Course(Integer id, String title, String description) {
+  public Course(Integer id, String title, String description, User mentor) {
     this.id = id;
     this.title = title;
     this.description = description;
+    this.mentor = mentor;
   }
 
   public Integer getId() {
@@ -84,5 +89,14 @@ public class Course {
   public void setMentor(User mentor) {
     this.mentor = mentor;
   }
+
+  public List<CourseTransaction> getCourseTransactions() {
+    return courseTransactions;
+  }
+
+  public void setCourseTransactions(List<CourseTransaction> courseTransactions) {
+    this.courseTransactions = courseTransactions;
+  }
+
   
 }

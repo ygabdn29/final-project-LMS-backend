@@ -8,4 +8,6 @@ import com.example.demo.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
   User findByUsername(String username);
+  User findByGuid(String guid);
+
 }
