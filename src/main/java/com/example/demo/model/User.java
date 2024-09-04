@@ -121,5 +121,4 @@ public class User {
   public void setCourseTransactions(List<CourseTransaction> courseTransactions) {
     this.courseTransactions = courseTransactions;
   } 
-
 }
