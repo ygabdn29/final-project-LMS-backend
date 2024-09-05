@@ -50,7 +50,7 @@ public class AssignmentSubmissionRestController {
       @PathVariable Integer materialId,
       @PathVariable Integer assignmentId,
       @RequestBody Map<String, String> request,
-      @RequestHeader Integer userId) {
+      @RequestHeader Integer courseTrId) {
     try {
       Course course = courseService.get(courseId);
       if (course == null) {
@@ -69,7 +69,7 @@ public class AssignmentSubmissionRestController {
             "Assignment not found or does not belong to the specified material");
       }
 
-      CourseTransaction courseTransaction = courseTransactionService.findByUserId(userId);
+      CourseTransaction courseTransaction = courseTransactionService.get(courseTrId);
       if (courseTransaction == null) {
         return Utils.generateResponseEntity(HttpStatus.OK, "No course transaction found for the user in this course");
       }

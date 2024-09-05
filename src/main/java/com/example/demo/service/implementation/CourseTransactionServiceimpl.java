@@ -35,9 +35,4 @@ public class CourseTransactionServiceimpl implements CourseTransactionService{
     courseTransactionRepository.deleteById(id);
     return courseTransactionRepository.findById(id).isEmpty();
   }
-
-  @Override
-  public CourseTransaction findByUserId(Integer userId) {
-    return courseTransactionRepository.findByUserId(userId);
-  }
 }

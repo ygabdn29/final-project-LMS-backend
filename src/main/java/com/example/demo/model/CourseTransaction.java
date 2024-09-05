@@ -76,6 +76,4 @@ public class CourseTransaction implements Serializable{
   public void setAssignmentSubmissions(List<AssignmentSubmission> assignmentSubmissions) {
     this.assignmentSubmissions = assignmentSubmissions;
   }
-
-  
 }
