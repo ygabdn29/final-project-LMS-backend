@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -81,8 +83,11 @@ public class AccountRestController {
       );
     
     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+    Map<String, String> userDetails = new HashMap<>();
+    userDetails.put("authenticatedUserRole", authenticatedUser.getRole().getName());
+    userDetails.put("authenticatedUserUsername", authenticatedUser.getUsername());
 
-    return Utils.generateResponseEntity(HttpStatus.OK, "Login Success!");
+    return Utils.generateResponseEntity(HttpStatus.OK, "Login Success!", userDetails);
     } catch(Exception e){
       return Utils.generateResponseEntity(HttpStatus.OK, "Credentials Doesn't Match Any Records!");
     }
