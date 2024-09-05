@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name = "tb_tr_assignment_submission")
 public class AssignmentSubmission {
@@ -23,23 +24,24 @@ public class AssignmentSubmission {
   @Column
   private Float score;
 
+  // manytoone
   @ManyToOne
-  @JoinColumn(name = "user_id", referencedColumnName = "employee_id")
-  private User user;
+  @JoinColumn(name = "course_transaction_id", referencedColumnName = "id")
+  private CourseTransaction courseTransaction;
 
   @ManyToOne
   @JoinColumn(name = "assignment_id", referencedColumnName = "id")
   private Assignment assignment;
 
+
   public AssignmentSubmission() {
   }
 
-  public AssignmentSubmission(Integer id, String answer, Float score, User user,
+  public AssignmentSubmission(Integer id, String answer, Float score, 
       Assignment assignment) {
     this.id = id;
     this.answer = answer;
     this.score = score;
-    this.user = user;
     this.assignment = assignment;
   }
 
@@ -59,14 +61,6 @@ public class AssignmentSubmission {
     this.answer = answer;
   }  
 
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
-
   public Assignment getAssignment() {
     return assignment;
   }
@@ -83,4 +77,13 @@ public class AssignmentSubmission {
     this.score = score;
   }
 
+  public CourseTransaction getCourseTransaction() {
+    return courseTransaction;
+  }
+
+  public void setCourseTransaction(CourseTransaction courseTransaction) {
+    this.courseTransaction = courseTransaction;
+  }
+
+  
 }

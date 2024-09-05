@@ -66,7 +66,7 @@ public class MaterialRestController {
         return Utils.generateResponseEntity(HttpStatus.OK, "Material not found or does not belong to the specified course");
       }
 
-      return Utils.generateResponseEntity(HttpStatus.OK, "Material Has Been Retrieved");
+      return Utils.generateResponseEntity(HttpStatus.OK, "Material Has Been Retrieved", material);
     } catch (Exception e) {
       return Utils.generateResponseEntity(HttpStatus.OK, "Failed to Fetch Data Materials" + e.getMessage());
     }
@@ -89,7 +89,7 @@ public class MaterialRestController {
     }
   }
 
-  @PutMapping("/{courseId}/material/{materialId}")
+  @PutMapping("/{courseId}/edit-material/{materialId}")
   public ResponseEntity<Object> updateMaterial(@PathVariable Integer courseId, @PathVariable Integer materialId,
       @RequestBody Material material) {
     try {
