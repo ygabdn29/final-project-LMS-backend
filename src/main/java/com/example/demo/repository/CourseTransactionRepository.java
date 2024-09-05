@@ -7,4 +7,5 @@ import com.example.demo.model.CourseTransaction;
 
 @Repository
 public interface CourseTransactionRepository extends JpaRepository<CourseTransaction, Integer>{
+  CourseTransaction findByUserId(Integer userId);
 }
