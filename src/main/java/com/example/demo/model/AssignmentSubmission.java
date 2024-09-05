@@ -26,7 +26,7 @@ public class AssignmentSubmission {
 
   // manytoone
   @ManyToOne
-  @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+  @JoinColumn(name = "course_transaction_id", referencedColumnName = "id")
   private CourseTransaction courseTransaction;
 
   @ManyToOne

@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -37,7 +38,7 @@ public class User {
   @JsonIgnore
   private Employee employee;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "role_id", referencedColumnName = "id")
   private Role role;
 
@@ -120,5 +121,4 @@ public class User {
   public void setCourseTransactions(List<CourseTransaction> courseTransactions) {
     this.courseTransactions = courseTransactions;
   } 
-
 }
