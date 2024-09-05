@@ -25,7 +25,7 @@ public class Course {
   @Column
   private String title;
 
-  @Column
+  @Column(columnDefinition = "TEXT")
   private String description;
 
   @OneToMany(mappedBy = "course")

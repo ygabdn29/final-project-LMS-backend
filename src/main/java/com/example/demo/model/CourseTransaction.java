@@ -14,9 +14,10 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.io.Serializable;
 @Entity
 @Table(name ="tb_tr_course_transaction")
-public class CourseTransaction {
+public class CourseTransaction implements Serializable{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column
@@ -26,16 +27,17 @@ public class CourseTransaction {
   @JoinColumn(name = "user_id", referencedColumnName = "employee_id")
   private User user;
 
-  // jadionetomany
-  @OneToMany(mappedBy = "courseTransaction")
-  @JsonIgnore
-  private List<AssignmentSubmission> assignmentSubmissions;
-
   @ManyToOne
   @JoinColumn(name = "course_id", referencedColumnName = "id")
   private Course course;
 
-  public CourseTransaction(){}
+  @OneToMany(mappedBy = "courseTransaction")
+  @JsonIgnore
+  private List<AssignmentSubmission> assignmentSubmissions;
+
+  public CourseTransaction(){
+
+  }
 
   public CourseTransaction(Integer id, User user, Course course) {
     this.id = id;
@@ -74,6 +76,4 @@ public class CourseTransaction {
   public void setAssignmentSubmissions(List<AssignmentSubmission> assignmentSubmissions) {
     this.assignmentSubmissions = assignmentSubmissions;
   }
-
-  
 }

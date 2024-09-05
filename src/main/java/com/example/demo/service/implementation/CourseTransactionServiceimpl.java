@@ -35,5 +35,4 @@ public class CourseTransactionServiceimpl implements CourseTransactionService{
     courseTransactionRepository.deleteById(id);
     return courseTransactionRepository.findById(id).isEmpty();
   }
-  
 }
