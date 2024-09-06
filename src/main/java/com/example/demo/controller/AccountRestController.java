@@ -36,9 +36,6 @@ import com.example.demo.service.UserService;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.springframework.web.bind.annotation.GetMapping;
-
-
 
 @RestController
 @RequestMapping("api/account")
@@ -82,12 +79,12 @@ public class AccountRestController {
       user.getAuthorities()
       );
     
-    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-    Map<String, String> userDetails = new HashMap<>();
-    userDetails.put("authenticatedUserRole", authenticatedUser.getRole().getName());
-    userDetails.put("authenticatedUserUsername", authenticatedUser.getUsername());
-
-    return Utils.generateResponseEntity(HttpStatus.OK, "Login Success!", userDetails);
+      SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+      Map<String, String> userDetails = new HashMap<>();
+      userDetails.put("userRole", authenticatedUser.getRole().getName());
+      userDetails.put("userUsername", authenticatedUser.getUsername());
+      userDetails.put("userID", Integer.toString(authenticatedUser.getId()));
+      return Utils.generateResponseEntity(HttpStatus.OK, "Login Success!", userDetails);
     } catch(Exception e){
       return Utils.generateResponseEntity(HttpStatus.OK, "Credentials Doesn't Match Any Records!");
     }
