@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +34,9 @@ import com.example.demo.service.EmployeeService;
 import com.example.demo.service.RoleService;
 import com.example.demo.service.UserService;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.web.bind.annotation.GetMapping;
 
 
 
@@ -47,6 +54,12 @@ public class AccountRestController {
 
   @Autowired
   private EmailService emailService;
+  
+  @Autowired
+  private EmployeeService employeeService;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @PostMapping("/login")
   public ResponseEntity<Object> login(@RequestBody User userLogin){
@@ -70,24 +83,27 @@ public class AccountRestController {
       );
     
     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+    Map<String, String> userDetails = new HashMap<>();
+    userDetails.put("authenticatedUserRole", authenticatedUser.getRole().getName());
+    userDetails.put("authenticatedUserUsername", authenticatedUser.getUsername());
 
-    return Utils.generateResponseEntity(HttpStatus.OK, "Login Success!");
+    return Utils.generateResponseEntity(HttpStatus.OK, "Login Success!", userDetails);
     } catch(Exception e){
       return Utils.generateResponseEntity(HttpStatus.OK, "Credentials Doesn't Match Any Records!");
-
-
+    }
+  }
 
   @PostMapping("/register")
   public ResponseEntity<Object> register(@RequestBody RegistrationDTO registrationDTO) {
     Department department = departmentService.get(registrationDTO.getDepartment_id());
     try {
-      Employee employee = new Employee(null, registrationDTO.getFirstName(), registrationDTO.getMiddleName(), registrationDTO.getLastName(), registrationDTO.getBirthDate(), registrationDTO.getGender(), registrationDTO.getAddress(), registrationDTO.getPhone(), registrationDTO.getEmail(), department);
+      Employee employee = new Employee(null, registrationDTO.getFirstName(), registrationDTO.getLastName(), registrationDTO.getBirthDate(), registrationDTO.getGender(), registrationDTO.getAddress(), registrationDTO.getPhone(), registrationDTO.getEmail(), department);
       employeeService.save(employee);
 
       String username = registrationDTO.getFirstName() + "." + registrationDTO.getLastName();
       Role role = roleService.findByName("Mentee");
       String guid = UUID.randomUUID().toString();
-      User user = new User(username, passwordEncoder.encode(registrationDTO.getPassword()) , null, employee, role);
+      User user = new User(username, passwordEncoder.encode(registrationDTO.getPassword()) , null, employee, role, false);
       user.setGuid(guid);
       userService.save(user);
 
@@ -107,5 +123,36 @@ public class AccountRestController {
     final List<SimpleGrantedAuthority> authorities = new LinkedList<>();
     authorities.add(new SimpleGrantedAuthority(role));
     return authorities;
+  }
+
+  @GetMapping("/mentors")
+  public ResponseEntity<Object> getMentors() {
+      try {
+        List<User> mentors = userService.get().stream()
+          .filter(user -> user.getRole().getName().equals("Mentor")) //filter only user mentor
+          .collect(Collectors.toList());
+        return Utils.generateResponseEntity(HttpStatus.OK, "Mentors accessed successfully", mentors);
+    } catch (Exception e) {
+        return Utils.generateResponseEntity(HttpStatus.OK, "Failed to access mentors: " + e.getMessage());
+    }
+  }
+  
+  @GetMapping("/verify/{guid}")
+  public ResponseEntity<Object> verifyEmail(@PathVariable String guid) {
+    // nanti ini yang diproses sama halaman react yang diakses dari link post register
+    User user = userService.verifyUser(guid);
+    if (user != null) {
+      user.setIsVerified(true);
+      user.setGuid(null);
+      userService.save(user);
+      return Utils.generateResponseEntity(HttpStatus.OK, "Verification Account successfully");
+    }
+    return Utils.generateResponseEntity(HttpStatus.BAD_REQUEST, "Verification Failed");
+  }
+  
+  @GetMapping("/get-departments")
+  public ResponseEntity<Object> getDepartments(){
+    List<Department> departments = departmentService.get();
+    return Utils.generateResponseEntity(HttpStatus.OK, "Departments Retrieved", departments);
   }
 }

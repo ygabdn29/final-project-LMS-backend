@@ -25,12 +25,16 @@ public class Course {
   @Column
   private String title;
 
-  @Column
+  @Column(columnDefinition = "TEXT")
   private String description;
 
   @OneToMany(mappedBy = "course")
   @JsonIgnore
   private List<Material> materials;
+
+  @OneToMany(mappedBy = "course")
+  @JsonIgnore
+  private List<CourseTransaction> courseTransactions;
 
   @OneToOne
   @JoinColumn(name = "mentor_id", referencedColumnName = "employee_id")
@@ -85,4 +89,14 @@ public class Course {
   public void setMentor(User mentor) {
     this.mentor = mentor;
   }
+
+  public List<CourseTransaction> getCourseTransactions() {
+    return courseTransactions;
+  }
+
+  public void setCourseTransactions(List<CourseTransaction> courseTransactions) {
+    this.courseTransactions = courseTransactions;
+  }
+
+  
 }
