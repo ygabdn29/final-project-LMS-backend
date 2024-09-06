@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,9 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.handler.Utils;
 import com.example.demo.model.Course;
+import com.example.demo.model.CourseTransaction;
 import com.example.demo.model.User;
+import com.example.demo.model.dto.EnrollCourseDTO;
 import com.example.demo.model.dto.NewCourseDTO;
 import com.example.demo.service.CourseService;
+import com.example.demo.service.CourseTransactionService;
 import com.example.demo.service.UserService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,6 +35,9 @@ public class CourseRestController {
   @Autowired
   private UserService userService;
 
+  @Autowired
+  private CourseTransactionService courseTransactionService;
+
   @PostMapping("create")
   public ResponseEntity<Object> newCourse(@RequestBody NewCourseDTO newCourseDTO) {
     try {
@@ -45,7 +52,7 @@ public class CourseRestController {
       return Utils.generateResponseEntity(HttpStatus.OK, "Failed to create course: " + e.getMessage());
     }
   }
-  
+
   @GetMapping("{courseId}")
   public ResponseEntity<Object> accessCourse(@PathVariable Integer courseId) {
     try {
@@ -70,7 +77,8 @@ public class CourseRestController {
       if (newMentor == null) {
         return Utils.generateResponseEntity(HttpStatus.OK, "User not found");
       }
-      Course updatedCourse = new Course(newCourseDTO.getId(), newCourseDTO.getTitle(), newCourseDTO.getDescription(), newMentor);
+      Course updatedCourse = new Course(newCourseDTO.getId(), newCourseDTO.getTitle(), newCourseDTO.getDescription(),
+          newMentor);
       courseService.save(updatedCourse);
       return Utils.generateResponseEntity(HttpStatus.OK, "Course updated successfully");
     } catch (Exception e) {
@@ -97,4 +105,52 @@ public class CourseRestController {
       return Utils.generateResponseEntity(HttpStatus.OK, "Failed to access course: " + e.getMessage());
     }
   }
+
+  @PostMapping("/enroll")
+  public ResponseEntity<Object> enrollCourse(@RequestBody EnrollCourseDTO enrollCourseDTO) {
+    Course course = courseService.get(enrollCourseDTO.getCourseId());
+    User user = userService.get(enrollCourseDTO.getUserId());
+    if (course == null)
+      return Utils.generateResponseEntity(HttpStatus.OK, "Invalid Course");
+    try {
+      CourseTransaction courseTransaction = new CourseTransaction(null, user, course);
+      courseTransactionService.save(courseTransaction);
+
+      return Utils.generateResponseEntity(HttpStatus.OK, "Success enrolling course");
+    } catch (Exception e) {
+      return Utils.generateResponseEntity(HttpStatus.OK, "Error when enrolling course");
+    }
+  }
+
+  @GetMapping("enrolled")
+  public ResponseEntity<Object> getEnrolledCourses(@RequestHeader Integer id) {
+    try {
+      List<CourseTransaction> courseTransactions = courseTransactionService.get().stream()
+          .filter(transaction -> transaction.getUser().getId().equals(id))
+          .collect(Collectors.toList());
+      if (courseTransactions.isEmpty()) {
+        return Utils.generateResponseEntity(HttpStatus.OK, "Haven't enrolled to any course");
+      }
+      return Utils.generateResponseEntity(HttpStatus.OK, "Success getting enrolled courses", courseTransactions);
+    } catch (Exception e) {
+      return Utils.generateResponseEntity(HttpStatus.OK, "Error when getting enrolled courses");
+    }
+  }
+
+  @GetMapping("assigned")
+  public ResponseEntity<Object> getAssignedCourse(@RequestHeader Integer id) {
+    try {
+      List<Course> courses = courseService.get().stream()
+          .filter(course -> course.getMentor().getId().equals(id))
+          .collect(Collectors.toList());
+      if (courses.isEmpty()) {
+        return Utils.generateResponseEntity(HttpStatus.OK, "Haven't assigned to any course or user not found");
+      }
+      Course assignedCourse = courses.get(0);
+      return Utils.generateResponseEntity(HttpStatus.OK, "Success getting assigned course", assignedCourse);
+    } catch (Exception e) {
+      return Utils.generateResponseEntity(HttpStatus.OK, "Error when getting assigned course");
+    }
+  }
+
 }
