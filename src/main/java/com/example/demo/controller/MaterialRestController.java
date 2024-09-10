@@ -36,16 +36,15 @@ public class MaterialRestController {
   @Autowired
   private AssignmentService assignmentService;
 
-  @GetMapping("/{id}/materials")
-  public ResponseEntity<Object> get(@PathVariable Integer id) {
+  @GetMapping("/{courseId}/materials")
+  public ResponseEntity<Object> get(@PathVariable Integer courseId) {
+    Course course = courseService.get(courseId);
+    if (course == null) {
+      return Utils.generateResponseEntity(HttpStatus.OK, "Course not found");
+    }
+
     try {
-      Course course = courseService.get(id);
-      if (course == null) {
-        return Utils.generateResponseEntity(HttpStatus.OK, "Course not found");
-      }
-
-      List<Material> materials = materialService.get();
-
+      List<Material> materials = materialService.getMaterial(courseId);
       return Utils.generateResponseEntity(HttpStatus.OK, "Data Materials Has Been Retrieved", materials);
     } catch (Exception e) {
       return Utils.generateResponseEntity(HttpStatus.OK, "Failed to Fetch Data Materials" + e.getMessage());
