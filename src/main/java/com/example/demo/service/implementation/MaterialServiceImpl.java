@@ -35,5 +35,11 @@ public class MaterialServiceImpl implements MaterialService{
     materialRepository.deleteById(id);
     return materialRepository.findById(id).isEmpty();
   }
+
+  @Override
+  public List<Material> getMaterial(Integer courseId) {
+    List<Material> material = materialRepository.findByCourseId(courseId);
+    return material;
+  }
   
 }
