@@ -146,8 +146,8 @@ public class CourseRestController {
       if (courses.isEmpty()) {
         return Utils.generateResponseEntity(HttpStatus.OK, "Haven't assigned to any course or user not found");
       }
-      Course assignedCourse = courses.get(0);
-      return Utils.generateResponseEntity(HttpStatus.OK, "Success getting assigned course", assignedCourse);
+      // Course assignedCourse = courses.get(0);
+      return Utils.generateResponseEntity(HttpStatus.OK, "Success getting assigned course", courses);
     } catch (Exception e) {
       return Utils.generateResponseEntity(HttpStatus.OK, "Error when getting assigned course");
     }
