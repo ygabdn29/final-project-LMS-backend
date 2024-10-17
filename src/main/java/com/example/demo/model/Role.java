@@ -1,11 +1,16 @@
 package com.example.demo.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_m_role")
@@ -17,6 +22,10 @@ public class Role {
 
   @Column
   private String name;
+
+  @OneToMany(mappedBy = "role")
+  @JsonIgnore
+  private List<UserRole> userRoles;
 
   public Role() {
   }  
@@ -40,5 +49,13 @@ public class Role {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public List<UserRole> getUserRoles() {
+    return userRoles;
+  }
+
+  public void setUserRoles(List<UserRole> userRoles) {
+    this.userRoles = userRoles;
   }
 }

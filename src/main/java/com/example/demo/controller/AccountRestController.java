@@ -19,137 +19,290 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import com.example.demo.handler.Utils;
 import com.example.demo.model.Department;
 import com.example.demo.model.Employee;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
+import com.example.demo.model.UserRole;
+import com.example.demo.model.dto.LoginDTO;
 import com.example.demo.model.dto.RegistrationDTO;
 import com.example.demo.service.DepartmentService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.service.RoleService;
+import com.example.demo.service.UserRoleService;
 import com.example.demo.service.UserService;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-
 @RestController
 @RequestMapping("api/account")
 public class AccountRestController {
-  @Autowired
-  private DepartmentService departmentService;
+    @Autowired
+    private DepartmentService departmentService;
 
-  @Autowired
-  private UserService userService;
-  
-  @Autowired
-  private RoleService roleService;
+    @Autowired
+    private UserService userService;
 
-  @Autowired
-  private EmailService emailService;
-  
-  @Autowired
-  private EmployeeService employeeService;
+    @Autowired
+    private RoleService roleService;
 
-  @Autowired
-  private PasswordEncoder passwordEncoder;
+    @Autowired
+    private EmailService emailService;
 
-  @PostMapping("/login")
-  public ResponseEntity<Object> login(@RequestBody User userLogin){
-    User authenticatedUser = userService.authenticate(userLogin.getUsername(), userLogin.getPassword());
+    @Autowired
+    private EmployeeService employeeService;
 
-    if(authenticatedUser != null && !authenticatedUser.getIsVerified()){
-      return Utils.generateResponseEntity(HttpStatus.OK, "Not Verified Yet!");
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserRoleService userRoleService;
+
+    // @PostMapping("/login")
+    // public ResponseEntity<Object> login(@RequestBody User userLogin){
+    // User authenticatedUser = userService.authenticate(userLogin.getUsername(),
+    // userLogin.getPassword());
+
+    // if(authenticatedUser != null && !authenticatedUser.getIsActive()){
+    // return Utils.generateResponseEntity(HttpStatus.OK, "Not Verified Yet!");
+    // }
+
+    // try{
+    // org.springframework.security.core.userdetails.User user = new
+    // org.springframework.security.core.userdetails.User(
+    // authenticatedUser.getId().toString(),
+    // "",
+    // getAuthorities(authenticatedUser.getRole().getName())
+    // );
+
+    // PreAuthenticatedAuthenticationToken authenticationToken = new
+    // PreAuthenticatedAuthenticationToken(
+    // user,
+    // "",
+    // user.getAuthorities()
+    // );
+
+    // SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+    // Map<String, String> userDetails = new HashMap<>();
+    // userDetails.put("userRole", authenticatedUser.getRole().getName());
+    // userDetails.put("userUsername", authenticatedUser.getUsername());
+    // userDetails.put("userID", Integer.toString(authenticatedUser.getId()));
+    // return Utils.generateResponseEntity(HttpStatus.OK, "Login Success!",
+    // userDetails);
+    // } catch(Exception e){
+    // return Utils.generateResponseEntity(HttpStatus.OK, "Credentials Doesn't Match
+    // Any Records!");
+    // }
+    // }
+
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody LoginDTO userLogin) {
+        User authenticatedUser = userService.authenticate(userLogin.getUsername(), userLogin.getPassword());
+
+        if (authenticatedUser != null && !authenticatedUser.getIsActive()) {
+            return Utils.generateResponseEntity(HttpStatus.OK, "Not Verified Yet!");
+        }
+
+        try {
+            List<UserRole> userRoles = authenticatedUser.getUserRoles();
+
+            String requestedRole = userLogin.getRequestedRole();
+
+            boolean hasRequestedRole = userRoles.stream()
+                    .anyMatch(userRole -> userRole.getRole().getName().equalsIgnoreCase(requestedRole));
+
+            if (!hasRequestedRole) {
+                return Utils.generateResponseEntity(HttpStatus.BAD_REQUEST,
+                        "User does not have the " + requestedRole + " role!");
+            }
+
+            org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(
+                    authenticatedUser.getId().toString(),
+                    "",
+                    getAuthorities(requestedRole));
+
+            PreAuthenticatedAuthenticationToken authenticationToken = new PreAuthenticatedAuthenticationToken(
+                    user,
+                    "",
+                    user.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+            Map<String, String> userDetails = new HashMap<>();
+            userDetails.put("primaryRole", requestedRole);
+            userDetails.put("userUsername", authenticatedUser.getUsername());
+            userDetails.put("userID", Integer.toString(authenticatedUser.getId()));
+
+            return Utils.generateResponseEntity(HttpStatus.OK, "Login Success!", userDetails);
+
+        } catch (Exception e) {
+            return Utils.generateResponseEntity(HttpStatus.OK, "Credentials Don't Match Any Records!");
+        }
     }
 
-    try{ 
-      org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(
-      authenticatedUser.getId().toString(),
-      "",
-      getAuthorities(authenticatedUser.getRole().getName())
-    );
+    @PostMapping("/register")
+    public ResponseEntity<Object> register(@RequestBody RegistrationDTO registrationDTO) {
+        Department department = departmentService.get(registrationDTO.getDepartment_id());
+        try {
+            Employee employee = new Employee(null, registrationDTO.getFirstName(), registrationDTO.getLastName(),
+                    registrationDTO.getBirthDate(), registrationDTO.getGender(), registrationDTO.getAddress(),
+                    registrationDTO.getPhone(), registrationDTO.getEmail(), department);
+            employeeService.save(employee);
 
-    PreAuthenticatedAuthenticationToken authenticationToken = new PreAuthenticatedAuthenticationToken(
-      user,
-      "", 
-      user.getAuthorities()
-      );
-    
-      SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-      Map<String, String> userDetails = new HashMap<>();
-      userDetails.put("userRole", authenticatedUser.getRole().getName());
-      userDetails.put("userUsername", authenticatedUser.getUsername());
-      userDetails.put("userID", Integer.toString(authenticatedUser.getId()));
-      return Utils.generateResponseEntity(HttpStatus.OK, "Login Success!", userDetails);
-    } catch(Exception e){
-      return Utils.generateResponseEntity(HttpStatus.OK, "Credentials Doesn't Match Any Records!");
+            String username = registrationDTO.getFirstName() + "." + registrationDTO.getLastName();
+            String guid = UUID.randomUUID().toString();
+            User user = new User(username, passwordEncoder.encode(registrationDTO.getPassword()), null, employee,
+                    false);
+            user.setGuid(guid);
+            userService.save(user);
+
+            Role menteeRole = roleService.findByName("Mentee");
+            UserRole userRole = new UserRole(null, user, menteeRole);
+            userRoleService.save(userRole);
+
+            String subject = "Email Verification";
+            String confirmationUrl = "http://localhost:3000/verify/" + user.getGuid(); // Update this to your frontend
+                                                                                       // URL
+            String message = "Click the link to verify your email: \n" + confirmationUrl;
+            emailService.sendEmail(employee.getEmail(), subject, message);
+
+            return Utils.generateResponseEntity(HttpStatus.OK,
+                    "Registration Successful. A verification email has been sent to your email address.");
+        } catch (Exception e) {
+            return Utils.generateResponseEntity(HttpStatus.OK, "Registration Failed: " + e.getMessage());
+        }
     }
-  }
 
-  @PostMapping("/register")
-  public ResponseEntity<Object> register(@RequestBody RegistrationDTO registrationDTO) {
-    Department department = departmentService.get(registrationDTO.getDepartment_id());
-    try {
-      Employee employee = new Employee(null, registrationDTO.getFirstName(), registrationDTO.getLastName(), registrationDTO.getBirthDate(), registrationDTO.getGender(), registrationDTO.getAddress(), registrationDTO.getPhone(), registrationDTO.getEmail(), department);
-      employeeService.save(employee);
-
-      String username = registrationDTO.getFirstName() + "." + registrationDTO.getLastName();
-      Role role = roleService.findByName("Mentee");
-      String guid = UUID.randomUUID().toString();
-      User user = new User(username, passwordEncoder.encode(registrationDTO.getPassword()) , null, employee, role, false);
-      user.setGuid(guid);
-      userService.save(user);
-
-      String subject = "Email Verification";
-      // Ini harus diubah ke link halaman react
-      String confirmationUrl = "http://localhost:3000/verify/" + user.getGuid();
-      String message = "Click the link to verify your email: \n" + confirmationUrl;
-      emailService.sendEmail(employee.getEmail(), subject, message);
-
-      return Utils.generateResponseEntity(HttpStatus.OK, "Registration Successful. A verification email has been sent to your email address.");
-    } catch (Exception e) {
-      return Utils.generateResponseEntity(HttpStatus.OK, "Registration Failed: " + e.getMessage());
+    private static Collection<? extends GrantedAuthority> getAuthorities(String role) {
+        final List<SimpleGrantedAuthority> authorities = new LinkedList<>();
+        authorities.add(new SimpleGrantedAuthority(role));
+        return authorities;
     }
-  }
 
-  private static Collection<? extends GrantedAuthority> getAuthorities(String role){
-    final List<SimpleGrantedAuthority> authorities = new LinkedList<>();
-    authorities.add(new SimpleGrantedAuthority(role));
-    return authorities;
-  }
+    @GetMapping("/mentors")
+    public ResponseEntity<Object> getMentors() {
+        try {
+            List<User> mentors = userService.get().stream()
+                    .filter(user -> user.getUserRoles().stream()
+                            .anyMatch(role -> role.getRole().getName().equals("Mentor")))
+                    .collect(Collectors.toList());
 
-  @GetMapping("/mentors")
-  public ResponseEntity<Object> getMentors() {
-      try {
-        List<User> mentors = userService.get().stream()
-          .filter(user -> user.getRole().getName().equals("Mentor")) //filter only user mentor
-          .collect(Collectors.toList());
-        return Utils.generateResponseEntity(HttpStatus.OK, "Mentors accessed successfully", mentors);
-    } catch (Exception e) {
-        return Utils.generateResponseEntity(HttpStatus.OK, "Failed to access mentors: " + e.getMessage());
+            return Utils.generateResponseEntity(HttpStatus.OK, "Mentors accessed successfully", mentors);
+        } catch (Exception e) {
+            return Utils.generateResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to access mentors: " + e.getMessage());
+        }
     }
-  }
-  
-  @GetMapping("/verify/{guid}")
-  public ResponseEntity<Object> verifyEmail(@PathVariable String guid) {
-    // nanti ini yang diproses sama halaman react yang diakses dari link post register
-    User user = userService.verifyUser(guid);
-    if (user != null) {
-      user.setIsVerified(true);
-      user.setGuid(null);
-      userService.save(user);
-      return Utils.generateResponseEntity(HttpStatus.OK, "Verification Account successfully");
+
+    @GetMapping("/mentees")
+    public ResponseEntity<Object> getMentees() {
+        try {
+            List<User> mentees = userService.get().stream()
+                    .filter(user -> user.getUserRoles().stream()
+                            .anyMatch(role -> role.getRole().getName().equals("Mentee")) && // check if the user has
+                                                                                            // "Mentee" role
+                            user.getUserRoles().stream()
+                                    .noneMatch(role -> role.getRole().getName().equals("Mentor")) // check if the user
+                                                                                                  // does NOT have
+                                                                                                  // "Mentor" role
+                    )
+                    .collect(Collectors.toList());
+
+            return Utils.generateResponseEntity(HttpStatus.OK, "Mentees accessed successfully", mentees);
+        } catch (Exception e) {
+            return Utils.generateResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to access mentees: " + e.getMessage());
+        }
     }
-    return Utils.generateResponseEntity(HttpStatus.BAD_REQUEST, "Verification Failed");
-  }
-  
-  @GetMapping("/get-departments")
-  public ResponseEntity<Object> getDepartments(){
-    List<Department> departments = departmentService.get();
-    return Utils.generateResponseEntity(HttpStatus.OK, "Departments Retrieved", departments);
-  }
+
+    @GetMapping("/verify/{guid}")
+    public ResponseEntity<Object> verifyEmail(@PathVariable String guid) {
+        // nanti ini yang diproses sama halaman react yang diakses dari link post
+        // register
+        User user = userService.verifyUser(guid);
+        if (user != null) {
+            user.setIsActive(true);
+            user.setGuid(null);
+            userService.save(user);
+            return Utils.generateResponseEntity(HttpStatus.OK, "Verification Account successfully");
+        }
+        return Utils.generateResponseEntity(HttpStatus.BAD_REQUEST, "Verification Failed");
+    }
+
+    @GetMapping("/get-departments")
+    public ResponseEntity<Object> getDepartments() {
+        List<Department> departments = departmentService.get();
+        return Utils.generateResponseEntity(HttpStatus.OK, "Departments Retrieved", departments);
+    }
+
+    @GetMapping("/setActive/{id}")
+    public ResponseEntity<Object> setUnactive(@PathVariable Integer id) {
+        User mentee = userService.get(id);
+        if (mentee != null) {
+            mentee.setIsActive(!(mentee.getIsActive()));
+            userService.save(mentee);
+            return Utils.generateResponseEntity(HttpStatus.OK, "User has been banned", mentee);
+        }
+        return Utils.generateResponseEntity(HttpStatus.NOT_FOUND, "No user with this id");
+    }
+
+    @GetMapping("delete/{id}")
+    public ResponseEntity<Object> deleteMentor(@PathVariable Integer id) {
+        try {
+            User user = userService.get(id);
+
+            if (user != null) {
+                List<UserRole> userRoles = user.getUserRoles();
+                UserRole mentorRole = userRoles.stream()
+                        .filter(userRole -> userRole.getRole().getName().equals("Mentor"))
+                        .findFirst()
+                        .orElse(null);
+
+                if (mentorRole != null) {
+
+                    userRoleService.delete(mentorRole.getId());
+                    userRoles.remove(mentorRole);
+                    userService.save(user);
+
+                    return Utils.generateResponseEntity(HttpStatus.OK, "User's Mentor Role has been removed");
+                } else {
+                    return Utils.generateResponseEntity(HttpStatus.OK, "User does not have a Mentor Role");
+                }
+            }
+
+            return Utils.generateResponseEntity(HttpStatus.NOT_FOUND, "User not found!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Utils.generateResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "An error occurred while deleting the Mentor Role: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("addMentor")
+    public ResponseEntity<Object> addMentor(@RequestParam Integer menteeId) {
+        User mentee = userService.get(menteeId);
+
+        if (mentee == null) {
+            return Utils.generateResponseEntity(HttpStatus.NOT_FOUND, "Mentee not found!");
+        }
+
+        Role mentorRole = roleService.findByName("Mentor");
+
+        if (mentorRole == null) {
+            return Utils.generateResponseEntity(HttpStatus.NOT_FOUND, "Mentor role not found!");
+        }
+
+        UserRole newUserRole = new UserRole();
+        newUserRole.setUser(mentee);
+        newUserRole.setRole(mentorRole);
+
+        userRoleService.save(newUserRole);
+
+        return Utils.generateResponseEntity(HttpStatus.OK, "Mentee has been assigned the Mentor role successfully!");
+    }
+
 }

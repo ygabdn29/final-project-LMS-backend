@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.handler.Utils;
 import com.example.demo.model.Course;
 import com.example.demo.model.CourseTransaction;
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.model.dto.EnrollCourseDTO;
 import com.example.demo.model.dto.NewCourseDTO;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.CourseTransactionService;
+import com.example.demo.service.RoleService;
 import com.example.demo.service.UserService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,20 +40,25 @@ public class CourseRestController {
   @Autowired
   private CourseTransactionService courseTransactionService;
 
-  @PostMapping("create")
-  public ResponseEntity<Object> newCourse(@RequestBody NewCourseDTO newCourseDTO) {
-    try {
-      User mentor = userService.get(newCourseDTO.getMentorId());
-      if (mentor == null) {
-        return Utils.generateResponseEntity(HttpStatus.OK, "User not found");
-      }
-      Course course = new Course(null, newCourseDTO.getTitle(), newCourseDTO.getDescription(), mentor);
-      courseService.save(course);
-      return Utils.generateResponseEntity(HttpStatus.OK, "Course successfully created");
-    } catch (Exception e) {
-      return Utils.generateResponseEntity(HttpStatus.OK, "Failed to create course: " + e.getMessage());
-    }
-  }
+  @Autowired
+  private RoleService roleService;
+
+  // @PostMapping("create")
+  // public ResponseEntity<Object> newCourse(@RequestBody NewCourseDTO newCourseDTO) {
+  //   try {
+  //     User mentor = userService.get(newCourseDTO.getMentorId());
+  //     if (mentor == null) {
+  //       return Utils.generateResponseEntity(HttpStatus.OK, "User not found");
+  //     }
+  //     Role role = roleService.findByName("Mentor");
+  //     mentor.setRole(role);
+  //     Course course = new Course(null, newCourseDTO.getTitle(), newCourseDTO.getDescription(), mentor);
+  //     courseService.save(course);
+  //     return Utils.generateResponseEntity(HttpStatus.OK, "Course successfully created");
+  //   } catch (Exception e) {
+  //     return Utils.generateResponseEntity(HttpStatus.OK, "Failed to create course: " + e.getMessage());
+  //   }
+  // }
 
   @GetMapping("{courseId}")
   public ResponseEntity<Object> accessCourse(@PathVariable Integer courseId) {
