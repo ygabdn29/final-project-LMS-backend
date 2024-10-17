@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -23,11 +24,17 @@ public class User {
   @Column
   private String password;
 
-  @Column(name ="is_verified")
-  private Boolean isVerified;
+  @Column(name = "is_active")
+  private Boolean isActive;
 
-  @Column(name="guid")
+  @Column(name = "guid")
   private String guid;
+
+  @Column
+  private LocalDate startSubs;
+
+  @Column
+  private LocalDate endSubs;
 
   @Id
   @Column
@@ -38,24 +45,23 @@ public class User {
   @JsonIgnore
   private Employee employee;
 
-  @ManyToOne
-  @JoinColumn(name = "role_id", referencedColumnName = "id")
-  private Role role;
-
   @OneToMany(mappedBy = "user")
   @JsonIgnore
   private List<CourseTransaction> courseTransactions;
 
+  @OneToMany(mappedBy = "user")
+  @JsonIgnore
+  private List<UserRole> userRoles;
+
   public User() {
   }
 
-  public User(String username, String password, Integer id, Employee employee, Role role, Boolean isVerified) {
+  public User(String username, String password, Integer id, Employee employee, Boolean isActive) {
     this.username = username;
     this.password = password;
     this.id = id;
     this.employee = employee;
-    this.role = role;
-    this.isVerified = isVerified;
+    this.isActive = isActive;
   }
 
   public String getUsername() {
@@ -98,27 +104,45 @@ public class User {
     this.guid = guid;
   }
 
-  public Role getRole() {
-    return role;
-  }
-
-  public void setRole(Role role) {
-    this.role = role;
-  }
-
-  public Boolean getIsVerified() {
-    return isVerified;
-  }
-
-  public void setIsVerified(Boolean isVerified) {
-    this.isVerified = isVerified;
-  }
-
   public List<CourseTransaction> getCourseTransactions() {
     return courseTransactions;
   }
 
   public void setCourseTransactions(List<CourseTransaction> courseTransactions) {
     this.courseTransactions = courseTransactions;
-  } 
+  }
+
+  public Boolean getIsActive() {
+    return isActive;
+  }
+
+  public void setIsActive(Boolean isActive) {
+    this.isActive = isActive;
+  }
+
+  public LocalDate getStartSubs() {
+    return startSubs;
+  }
+
+  public void setStartSubs(LocalDate startSubs) {
+    this.startSubs = startSubs;
+  }
+
+  public LocalDate getEndSubs() {
+    return endSubs;
+  }
+
+  public void setEndSubs(LocalDate endSubs) {
+    this.endSubs = endSubs;
+  }
+
+  public List<UserRole> getUserRoles() {
+    return userRoles;
+  }
+
+  public void setUserRoles(List<UserRole> userRoles) {
+    this.userRoles = userRoles;
+  }
+
+  
 }
