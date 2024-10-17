@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("api/course")
@@ -133,7 +135,7 @@ public class MaterialRestController {
 
   // Assignment
   @GetMapping("/{courseId}/material/{materialId}/assignment")
-  public ResponseEntity<Object> getMaterialAssignment(@PathVariable Integer materialId, @PathVariable Integer courseId){
+  public ResponseEntity<Object> getMaterialAssignments(@PathVariable Integer materialId, @PathVariable Integer courseId){
     Course course = courseService.get(courseId);
     Material material = materialService.get(materialId);
 
@@ -149,6 +151,25 @@ public class MaterialRestController {
       return Utils.generateResponseEntity(HttpStatus.OK, e.getMessage());
     }
   }
+
+  @GetMapping("/{courseId}/material/{materialId}/assignment/{assignmentId}")
+  public ResponseEntity<Object> getMaterialAassignment(@PathVariable Integer materialId, @PathVariable Integer courseId, @PathVariable Integer assignmentId) {
+    Course course = courseService.get(courseId);
+    Material material = materialService.get(materialId);
+
+    if(course == null || material == null){
+      return Utils.generateResponseEntity(HttpStatus.OK, "Invalid course or material");
+    }
+
+    try {
+      Assignment assignments = assignmentService.get(assignmentId);
+      return Utils.generateResponseEntity(HttpStatus.OK, "Assignment retrieved!", assignments);
+    } catch (Exception e) {
+      
+      return Utils.generateResponseEntity(HttpStatus.OK, e.getMessage());
+    }
+  }
+  
 
   @PostMapping("/{courseId}/material/{materialId}/assignment/new")
   public ResponseEntity<Object> saveNewAssignment(@RequestBody AssignmentDTO assignmentDTO, @PathVariable Integer materialId, @PathVariable Integer courseId){
